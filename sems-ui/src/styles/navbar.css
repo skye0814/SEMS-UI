@@ -1,0 +1,283 @@
+/*--------------------- NAVBAR STYLING ----------------------------------------------*/
+a {
+    text-decoration: none;
+  }
+  
+  li {
+    list-style: none;
+  }
+
+  /* MUI custom styling */
+  .custom-list-item:hover{
+    background-color: black;
+    color: white;
+  }
+  .custom-list-item {
+    padding: 15px 0 !important;
+    border-radius: 8px !important;
+    display: grid !important;
+    grid-template-columns: 50px 200px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* NAVBAR STYLING STARTS */
+  .navbar-custom {
+    display: flex;
+    align-items: center;
+    padding: 20px 6vw 20px 6vw;
+    background-color: rgb(0, 183, 255);
+    color: #fff;
+    box-shadow: none;
+    position: fixed;
+    top: 0;
+    transition: .3s;
+    z-index: 999;
+    width: 100%;
+  }
+
+  .with-box-shadow {
+    box-shadow: #00000026 1.95px 1.95px 2.6px;
+  }
+  
+  .right-nav {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 5%;
+    gap: 29px;
+  }
+  
+  .nav-links {
+    /* margin-left: 50px; */
+    margin: auto 0 auto 50px;
+  }
+
+  .nav-links a {
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover{
+    color: white;
+  }
+  
+  /* LOGO */
+  .logo-image {
+    max-width: 60px;
+  }
+  .logo {
+    display: flex;
+  }
+
+  .logo:hover{
+    cursor: pointer;
+  }
+  
+  /* NAVBAR MENU */
+  .drawer-list-item{
+  }
+
+  .drawer-list-title {
+    text-transform: uppercase;
+    font-family: 'General Sans', sans-serif;
+    font-weight: 600;
+    color: gray;
+    padding: 40px 0 10px 15px;
+  }
+
+  .menu {
+    display: flex;
+    gap: 1em;
+    /* font-size: 15px; */
+  }
+  
+  .menu li:hover {
+    background-color: var(--blue);
+    border-radius: 5px;
+    transition: 0.3s ease;
+  }
+  
+  .menu li {
+    padding: 5px 14px;
+  }
+  
+  /* DROPDOWN MENU */
+  .dropdown {
+    background-color: rgb(1, 139, 139);
+    padding: 1em 0;
+    position: absolute; /*WITH RESPECT TO PARENT*/
+    display: none;
+    border-radius: 8px;
+    top: 35px;
+  }
+  
+  .dropdown li + li {
+    margin-top: 10px;
+  }
+  
+  .dropdown li {
+    padding: 0.5em 1em;
+    width: 8em;
+    text-align: center;
+  }
+  
+  .dropdown li:hover {
+    background-color: #4c9e9e;
+  }
+  .services:hover .dropdown {
+    display: block;
+  }
+
+  /*  USER CIRCLE  */
+  .user-info-circle {
+    height: 50px;
+    width: 50px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .user-info-drawer {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+  
+  
+  /* RESPONSIVE NAVBAR MENU STARTS */
+  
+  /* CHECKBOX HACK */
+  
+  input[type=checkbox] {
+    display: none;
+  } 
+  
+  /* HAMBURGER MENU */
+  .hamburger {
+    font-size: 24px;
+    user-select: none;
+  }
+  
+  .hamburger:hover{
+    cursor: pointer;
+  }
+  
+  .login-buttons {
+    display: flex;
+  }
+  
+  .user-picture-div {
+    position: relative;
+  }
+  
+  .user-picture {
+    padding: 10px 15px; 
+    font-size: 27px;
+  }
+  
+  .user-picture:hover {
+    cursor: pointer;
+  }
+  
+  .user-picture-dropdown {
+    display: block;
+    position: absolute;
+    left: -57px;
+    top: 55px;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    color: black;
+    width: 170px;
+  }
+  
+  .user-dropdown-arrow {
+    transform: rotate(270deg);
+    position: absolute;
+    top: -13px;
+    left: 79px;
+  }
+  
+  .user-close {
+    position: absolute;
+    right: 11px;
+    top: 5px;
+    font-size: 20px;
+  }
+  
+  .login-buttons {
+    display: block;
+  }
+  
+  @media (min-width: 768px){
+    .menu {
+      margin-right: 100px;
+        display: flex !important;
+        gap: 1em;
+      }
+    .menu li {
+        padding: 5px 14px;
+      }
+    .login-buttons-mobile {
+      display: none;
+    }
+  }
+  
+  /* Mobile view */
+  @media (max-width: 768px) {
+    .navbar-custom {
+      padding: 14px 3% 14px 3%;
+    }
+   .menu {
+      display:none;
+      position: absolute;
+      background-color:black;
+      right: 0;
+      left: 0;
+      text-align: center;
+      padding: 16px 0;
+      margin-top: 50px;
+    }
+  
+    .menu li:hover {
+      display: inline-block;
+      background-color:#4c9e9e;
+      transition: 0.3s ease;
+    }
+  
+    .menu li + li {
+      margin-top: 12px;
+    }
+  
+    input[type=checkbox]:checked ~ .menu {
+      display: block;
+    }
+  
+    .hamburger {
+      display: block;
+    }
+  
+    .dropdown {
+      left: 50%;
+      top: 30px;
+      transform: translateX(35%);
+    }
+  
+    .dropdown li:hover {
+      background-color: #4c9e9e;
+    }
+  
+    .user-picture-dropdown {
+      left: -82px;
+    }
+  
+    .user-dropdown-arrow {
+      top: -13px;
+      left: 104px;
+    }
+  }
+  
+  /*--------------------- NAVBAR STYLING ENDS ----------------------------------------------*/
