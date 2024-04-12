@@ -4,8 +4,16 @@ import { Link } from 'react-router-dom';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Drawer, IconButton } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Col, Container, Row } from 'react-bootstrap';
 // import { getCurrentUser, logout } from '../services/authService';
 // import { Customer } from '../models/Customer';
+
+interface DrawerItem{
+  icon: IconProp,
+  text: string,
+  location: () => void
+}
 
 export default function NavBar(){
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
@@ -13,6 +21,48 @@ export default function NavBar(){
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  let drawerItemsNavigation: DrawerItem[] = [
+    {
+      icon: 'calendar',
+      text: 'Events',
+      location: () => {
+        window.location.href = 'admin/events-manager'
+      }
+    },
+    {
+      icon: 'person',
+      text: 'Participants',
+      location: () => {
+        window.location.href = 'admin/participants'
+      }
+    },
+    {
+      icon: 'gamepad',
+      text: 'Sports',
+      location: () => {
+        window.location.href = 'admin/sports'
+      }
+    },
+    {
+      icon: 'dollar-sign',
+      text: 'Finance',
+      location: () => {
+        window.location.href = 'admin/finance'
+      }
+    },
+    {
+      icon: 'tower-broadcast',
+      text: 'Broadcast',
+      location: () => {
+        window.location.href = 'admin/broadcast'
+      }
+    }
+  ]
 
 //   const getCustomerDetails = async () => {
 //       try{
@@ -137,8 +187,35 @@ export default function NavBar(){
             color: 'black',
             cursor: 'pointer'
           }}
-          onClick={toggleDrawer(true)}
+          onClick={handleShow}
         />
+
+        <Offcanvas show={show} onHide={handleClose}>
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Menu</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Container>
+              {drawerItemsNavigation.map((drawerItem) => {
+                  return(
+                    <Row 
+                      key={drawerItem.text}
+                      className="custom-list-item"
+                      onClick={drawerItem.location}
+                      sx={{
+                        '&:hover': {
+                          cursor: 'pointer'
+                        }
+                      }}
+                    >
+                      <FontAwesomeIcon icon={drawerItem.icon} style={{fontSize: '20px', margin: 'auto'}} />
+                      <span style={{fontWeight: '600'}}>{drawerItem.text}</span>
+                    </Row>
+                  );
+                })}
+            </Container>
+          </Offcanvas.Body>
+        </Offcanvas>
         {/* <Drawer open={open} onClose={toggleDrawer(false)}>
           <Box
             role="presentation"
