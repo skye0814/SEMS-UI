@@ -84,7 +84,7 @@ function SignInForm() {
           });
         }
 
-        window.location.href = '/admin/events-manager';
+        window.location.href = '/admin/dashboard';
       };
 
     return (
