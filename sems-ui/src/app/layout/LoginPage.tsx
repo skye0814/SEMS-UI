@@ -9,7 +9,7 @@ export default function LoginPage(){
         return;
         }
     };
-    const containerClass = "container " + (type === "signUp" ? "right-panel-active" : "");
+    const containerClass = "container-login " + (type === "signUp" ? "right-panel-active" : "");
 
     useEffect(()=>{
         // Change title

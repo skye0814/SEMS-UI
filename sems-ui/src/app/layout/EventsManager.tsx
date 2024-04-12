@@ -18,7 +18,7 @@ import {
 import Pagination from 'react-bootstrap/Pagination';
 import { Select } from '@chakra-ui/react'
 
-export default function NavBar(){
+export default function EventsManger(){
     return(
         <>
         <div style={{marginTop: '120px'}}></div>
@@ -106,27 +106,27 @@ export default function NavBar(){
                             <form>
                                 <FormControl isRequired>
                                     <FormLabel>Event name</FormLabel>
-                                    <Input placeholder='First name' />
+                                    <Input placeholder='Event name' />
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Description</FormLabel>
-                                    <Input placeholder='First name' />
+                                    <Input placeholder='Description' />
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Event Start Date</FormLabel>
-                                    <Input placeholder='First name' />
+                                    <Input placeholder='Event Start Date' />
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Event End Date</FormLabel>
-                                    <Input placeholder='First name' />
+                                    <Input placeholder='Event End Date' />
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Location</FormLabel>
-                                    <Input placeholder='First name' />
+                                    <Input placeholder='Location' />
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Sport</FormLabel>
-                                    <Select placeholder='Select option'>
+                                    <Select placeholder='Select a sport'>
                                         <option value='option1'>Basketball</option>
                                         <option value='option2'>Volleyball</option>
                                         <option value='option3'>Tennis</option>
