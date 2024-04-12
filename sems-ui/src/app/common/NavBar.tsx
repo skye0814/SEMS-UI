@@ -29,37 +29,44 @@ export default function NavBar(){
   let drawerItemsNavigation: DrawerItem[] = [
     {
       icon: 'calendar',
+      text: 'Dashboard',
+      location: () => {
+        window.location.href = '/admin/dashboard'
+      }
+    },
+    {
+      icon: 'calendar',
       text: 'Events',
       location: () => {
-        window.location.href = 'admin/events-manager'
+        window.location.href = '/admin/events-manager'
       }
     },
     {
       icon: 'person',
       text: 'Participants',
       location: () => {
-        window.location.href = 'admin/participants'
+        window.location.href = '/admin/participants'
       }
     },
     {
       icon: 'gamepad',
       text: 'Sports',
       location: () => {
-        window.location.href = 'admin/sports'
+        window.location.href = '/admin/sports'
       }
     },
     {
       icon: 'dollar-sign',
       text: 'Finance',
       location: () => {
-        window.location.href = 'admin/finance'
+        window.location.href = '/admin/finance'
       }
     },
     {
       icon: 'tower-broadcast',
       text: 'Broadcast',
       location: () => {
-        window.location.href = 'admin/broadcast'
+        window.location.href = '/admin/broadcast'
       }
     }
   ]
@@ -164,6 +171,9 @@ export default function NavBar(){
       </div>
       <ul className="nav-links">
         <div className="menu">
+          <li>
+            <Link to="admin/dashboard">Home</Link>
+          </li>
           <li>
             <Link to="admin/events-manager">Events</Link>
           </li>
