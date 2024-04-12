@@ -13,6 +13,7 @@ import NavBar from '../common/NavBar';
 import EventsManager from './EventsManager';
 import ParticipantsManager from './ParticipantsManager';
 import LoginPage from './LoginPage';
+import Dashboard from './Dashboard';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/*" element={<PageNotFound />} />
                 <Route path="admin/events-manager" element={<EventsManager />} />
                 <Route path="admin/participants" element={<ParticipantsManager />} />
+                <Route path="admin/dashboard" element={<Dashboard />} />
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />
