@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/login.css";
+import background from "../../assets/img/sport-1.svg";
 
 export default function LoginPage(){
     const [type, setType] = useState("signIn");
@@ -20,8 +21,19 @@ export default function LoginPage(){
 
 
     return(
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-            <div className={containerClass} id="container" style={{position: 'absolute', top: '50%', transform: 'translateY(-50%)'}}>
+        <div style={{
+          display: 'flex', 
+          justifyContent: 'center',
+          backgroundImage: `url(${background})`,
+          backgroundSize: 'cover',
+          height: '100vh'
+          }}>
+            <div className={containerClass} id="container" 
+              style={{
+                position: 'absolute', 
+                top: '50%', 
+                transform: 'translateY(-50%)'
+                }}>
                 <SignUpForm />
                 <SignInForm />
                 <div className="overlay-container">
@@ -40,7 +52,7 @@ export default function LoginPage(){
                     </button>
                     </div>
                     <div className="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
+                    <h1>Hello!</h1>
                     <p>Enter your personal details and start journey with us</p>
                     <button
                         className="button ghost "
