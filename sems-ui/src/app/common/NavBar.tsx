@@ -194,7 +194,7 @@ export default function NavBar(){
           icon='bars' 
           style={{
             fontSize: '30px', 
-            color: 'black',
+            color: '#F8F9FB',
             cursor: 'pointer'
           }}
           onClick={handleShow}

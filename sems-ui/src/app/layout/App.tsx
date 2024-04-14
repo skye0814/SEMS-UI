@@ -14,6 +14,8 @@ import EventsManager from './EventsManager';
 import ParticipantsManager from './ParticipantsManager';
 import LoginPage from './LoginPage';
 import Dashboard from './Dashboard';
+import Home from './Home';
+import MatchHistory from './MatchHistory';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
                 <Route path="admin/events-manager" element={<EventsManager />} />
                 <Route path="admin/participants" element={<ParticipantsManager />} />
                 <Route path="admin/dashboard" element={<Dashboard />} />
+                <Route path="home" element={<Home />} />
+                <Route path="matchhistory" element={<MatchHistory />} />
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />

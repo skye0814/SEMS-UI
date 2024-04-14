@@ -49,3 +49,9 @@
     bottom: 35%;
     right: 7%;
   }
+
+  h6 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }

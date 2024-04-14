@@ -22,18 +22,18 @@ export default function LoginPage(){
 
     return(
         <div style={{
-          display: 'flex', 
-          justifyContent: 'center',
-          backgroundImage: `url(${background})`,
-          backgroundSize: 'cover',
-          height: '100vh'
+            display: 'flex', 
+            justifyContent: 'center',
+            backgroundImage: `url(${background})`,
+            backgroundSize: 'cover',
+            height: '100vh'
           }}>
             <div className={containerClass} id="container" 
               style={{
                 position: 'absolute', 
                 top: '50%', 
                 transform: 'translateY(-50%)'
-                }}>
+              }}>
                 <SignUpForm />
                 <SignInForm />
                 <div className="overlay-container">
