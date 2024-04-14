@@ -4,6 +4,7 @@ import "../../styles/dashboard.css";
 import { Avatar, AvatarBadge, AvatarGroup, Wrap, WrapItem } from '@chakra-ui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CanvasJSReact from '@canvasjs/react-charts';
+import { color } from 'framer-motion';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -15,6 +16,7 @@ export default function Dashboard(){
     }, []);
 
     const options = {
+        color: '#F8F9FB',
         height: 200,
         width: 400,
         backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -72,14 +74,14 @@ export default function Dashboard(){
                     <Col>
                         <Row>
                             <Col>
-                                <div className='dashboard-card' style={{backgroundColor: 'rgb(246, 245, 242)'}}>
+                                <div className='dashboard-card' style={{backgroundColor: '#b3e8ff'}}>
                                     <div className='dashboard-card-title'>Event Created</div>
                                     <div className='dashboard-card-counter'>101</div>
                                     <FontAwesomeIcon className='dashboard-card-icon' icon='chart-line' style={{fontSize: '50', color: 'blue'}} />
                                 </div>
                             </Col>
                             <Col>
-                                <div className='dashboard-card' style={{backgroundColor: 'rgb(240, 235, 227)'}}>
+                                <div className='dashboard-card' style={{backgroundColor: '#b3e8ff'}}>
                                     <div className='dashboard-card-title'>Participants</div>
                                     <div className='dashboard-card-counter'>923</div>
                                     <FontAwesomeIcon className='dashboard-card-icon' icon='chart-line' style={{fontSize: '50', color: 'red'}} />
@@ -88,14 +90,14 @@ export default function Dashboard(){
                         </Row>
                         <Row>
                             <Col>
-                                <div className='dashboard-card' style={{backgroundColor: 'rgb(243, 208, 215)'}}>
+                                <div className='dashboard-card' style={{backgroundColor: '#b3e8ff'}}>
                                     <div className='dashboard-card-title'>Joined Participants</div>
                                     <div className='dashboard-card-counter'>431</div>
                                     <FontAwesomeIcon className='dashboard-card-icon' icon='chart-line' style={{fontSize: '50', color: 'brown'}} />
                                 </div>
                             </Col>
                             <Col>
-                                <div className='dashboard-card' style={{backgroundColor: 'rgb(255, 239, 239)'}}>
+                                <div className='dashboard-card' style={{backgroundColor: '#b3e8ff'}}>
                                     <div className='dashboard-card-title'>Average Rating</div>
                                     <div className='dashboard-card-counter'>0.5</div>
                                     <FontAwesomeIcon className='dashboard-card-icon' icon='chart-line' style={{fontSize: '50', color: 'black'}} />
@@ -104,7 +106,7 @@ export default function Dashboard(){
                         </Row>
                     </Col>
                     <Col>
-                        <div className='dashboard-card' style={{backgroundColor: 'rgb(243, 208, 215)', height: '95%'}}>
+                        <div className='dashboard-card' style={{backgroundColor: '#b3e8ff', height: '95%'}}>
                             <div 
                                 className='dashboard-card-title' 
                                 style={{
@@ -128,7 +130,7 @@ export default function Dashboard(){
                 </Row>
                 <Row>
                     <Col>
-                        <div className='dashboard-card' style={{backgroundColor: 'rgb(255, 239, 239)', height: '500px'}}>
+                        <div className='dashboard-card' style={{backgroundColor: '#b3e8ff', height: '500px'}}>
                             <div 
                                 className='dashboard-card-title' 
                                 style={{
@@ -141,7 +143,7 @@ export default function Dashboard(){
                         </div>
                     </Col>
                     <Col>
-                        <div className='dashboard-card' style={{backgroundColor: 'rgb(255, 239, 239)', height: '500px'}}>
+                        <div className='dashboard-card' style={{backgroundColor: '#b3e8ff', height: '500px'}}>
                             <div 
                                 className='dashboard-card-title' 
                                 style={{
