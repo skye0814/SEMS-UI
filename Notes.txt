@@ -1,6 +1,0 @@
-Dependencies:
-Chakra UI: npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
-React DOM: npm install react react-dom
-Axios React: npm i axios
-React Bootstrap: npm install react-bootstrap bootstrap
-CanvasJs React: npm i @canvasjs/react-charts
