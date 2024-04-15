@@ -16,6 +16,7 @@ import LoginPage from './LoginPage';
 import Dashboard from './Dashboard';
 import Home from './Home';
 import MatchHistory from './MatchHistory';
+import EvaluationForm from './EvaluationForm';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="admin/dashboard" element={<Dashboard />} />
                 <Route path="home" element={<Home />} />
                 <Route path="matchhistory" element={<MatchHistory />} />
+                <Route path="evaluationform" element={<EvaluationForm />} />
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />
