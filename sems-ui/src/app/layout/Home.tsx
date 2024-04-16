@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import "../../styles/home.css";
-import { Avatar, AvatarBadge, AvatarGroup, Center, Wrap, WrapItem } from '@chakra-ui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CanvasJSReact from '@canvasjs/react-charts';
 import background from "../../assets/img/sport-1.svg";
 import { Box } from '@chakra-ui/react'
-import baskeball from "../../assets/Sports Icon/basketball.png"
 
 export default function Home(){
     return(

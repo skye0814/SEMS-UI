@@ -17,6 +17,8 @@ import Dashboard from './Dashboard';
 import Home from './Home';
 import MatchHistory from './MatchHistory';
 import EvaluationForm from './EvaluationForm';
+import MatchDetails from './MatchDetails';
+import Rankings from './Rankings';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
                 <Route path="home" element={<Home />} />
                 <Route path="matchhistory" element={<MatchHistory />} />
                 <Route path="evaluationform" element={<EvaluationForm />} />
+                <Route path="matchdetails" element={<MatchDetails />} />
+                <Route path="rankings" element={<Rankings />} />
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />
