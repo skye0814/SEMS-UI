@@ -25,6 +25,7 @@ npm install zustand
 npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
 npm install react-bootstrap bootstrap
 npm i @canvasjs/react-charts
+npm install --save react-toastify
 ```
 
 ## Authors
