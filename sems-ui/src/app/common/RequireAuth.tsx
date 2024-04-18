@@ -5,15 +5,17 @@ import { User } from '../models/User';
 import { AxiosResponse } from 'axios';
 
 interface Props {
-    children: ReactNode
+    children: JSX.Element
 }
 
-export default function RequireAuth({ children }: Props){
+export default function RequireAuth({ children }: Props): JSX.Element{
     const [isAuthenticated, setIsAuthenticated] = useState(true);
 
     useEffect(() => {
         async function getUserAsync() {
             const response: AxiosResponse | null = await getCurrentUser();
+            const token = localStorage.getItem('ep-token');
+            
             if (response?.status === undefined || response?.status === 200) {
                 if (!response){
                     setIsAuthenticated(false);
@@ -21,6 +23,10 @@ export default function RequireAuth({ children }: Props){
                 }
 
                 setIsAuthenticated(true);
+            }
+            else if (!token) {
+                setIsAuthenticated(false);
+                logout();
             }
             else {
                 setIsAuthenticated(false);

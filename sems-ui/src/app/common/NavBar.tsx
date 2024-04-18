@@ -6,6 +6,7 @@ import { Drawer, IconButton } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Col, Container, Row } from 'react-bootstrap';
+import { getCurrentUser, logout } from '../services/authService';
 // import { getCurrentUser, logout } from '../services/authService';
 // import { Customer } from '../models/Customer';
 
@@ -71,22 +72,22 @@ export default function NavBar(){
     }
   ]
 
-//   const getCustomerDetails = async () => {
-//       try{
-//         const response = await getCurrentUser();
-//         if (response?.data !== undefined){
-//           setIsUserLoggedIn(true);
-//         }
-//         else {
-//           setIsUserLoggedIn(false);
-//         }
+  const getUser = async () => {
+      try{
+        const response = await getCurrentUser();
+        if (response?.data !== undefined){
+          setIsUserLoggedIn(true);
+        }
+        else {
+          setIsUserLoggedIn(false);
+        }
 
-//         setCustomer(response?.data);
-//       }
-//       catch(error){
-//         console.log(error);
-//       }
-//   }
+        // setCustomer(response?.data);
+      }
+      catch(error){
+        console.log(error);
+      }
+  }
 
   const toggleDrawer = (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -223,6 +224,25 @@ export default function NavBar(){
                     </Row>
                   );
                 })}
+            </Container>
+
+            <Container style={{
+              position: "absolute",
+              bottom: 20,
+              width: '90%'
+            }}>
+                <Row
+                  className="custom-list-item"
+                  onClick={logout}
+                  sx={{
+                    '&:hover': {
+                      cursor: 'pointer'
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon='right-from-bracket' style={{fontSize: '20px', margin: 'auto'}} />
+                  <span style={{fontWeight: '600'}}>Logout</span>
+                </Row>
             </Container>
           </Offcanvas.Body>
         </Offcanvas>

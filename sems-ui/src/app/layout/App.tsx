@@ -19,17 +19,38 @@ import MatchHistory from './MatchHistory';
 import EvaluationForm from './EvaluationForm';
 import MatchDetails from './MatchDetails';
 import Rankings from './Rankings';
+import RequireAuth from '../common/RequireAuth';
 
 function App() {
   return (
     <div className="App">
-          <div style={{minHeight: '100vh'}}>
+          <div style={{minHeight: '100vh', minWidth: '100vw'}}>
             <NavBar />
               <Routes>
                 <Route path="/*" element={<PageNotFound />} />
-                <Route path="admin/events-manager" element={<EventsManager />} />
-                <Route path="admin/participants" element={<ParticipantsManager />} />
-                <Route path="admin/dashboard" element={<Dashboard />} />
+                <Route 
+                  path="admin/events-manager" 
+                  element={
+                    <RequireAuth>
+                      <EventsManager />
+                    </RequireAuth>} 
+                />
+                <Route 
+                  path="admin/participants" 
+                  element={
+                    <RequireAuth>
+                      <ParticipantsManager />
+                    </RequireAuth>
+                    } 
+                />
+                <Route 
+                  path="admin/dashboard" 
+                  element={
+                    <RequireAuth>
+                      <Dashboard />
+                    </RequireAuth>
+                  } 
+                />
                 <Route path="home" element={<Home />} />
                 <Route path="matchhistory" element={<MatchHistory />} />
                 <Route path="evaluationform" element={<EvaluationForm />} />
@@ -38,14 +59,6 @@ function App() {
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />
-                {/* <Route path="/" element={<Home />} /> */}
-                {/* <Route 
-                  path='/services/products' 
-                  element={
-                    <RequireAuth>
-                      <Products />
-                    </RequireAuth>
-                  } /> */}
               </Routes>
           </div>
       </div>

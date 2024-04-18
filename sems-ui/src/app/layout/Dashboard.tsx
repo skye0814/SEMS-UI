@@ -12,7 +12,10 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 export default function Dashboard(){
     useEffect(()=> {
         var bodyElement: HTMLElement = document.getElementsByClassName("canvasjs-chart-credit")[0] as HTMLElement;
-        bodyElement.style.visibility = 'hidden';
+
+        if (bodyElement) {
+            bodyElement.style.visibility = 'hidden';
+        }
     }, []);
 
     const options = {
@@ -121,9 +124,8 @@ export default function Dashboard(){
                                 left: '7%',
                                 position: 'absolute'
                             }}>
-                                <CanvasJSChart options = {options} 
-                                    /* onRef={ref => this.chart = ref} */
-                                />
+                                {/* <CanvasJSChart options = {options} 
+                                /> */}
                             </div>
                         </div>
                     </Col>

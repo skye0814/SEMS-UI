@@ -230,6 +230,7 @@ a {
   @media (max-width: 768px) {
     .navbar-custom {
       padding: 14px 3% 14px 3%;
+      height: 70px;
     }
    .menu {
       display:none;

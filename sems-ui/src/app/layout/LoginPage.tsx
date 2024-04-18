@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/login.css";
 import background from "../../assets/img/sport-1.svg";
+import { UserRequest } from '../models/UserRequest';
+import { post } from '../services/api';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+interface FormElements extends HTMLFormControlsCollection {
+  username: HTMLInputElement;
+  password: HTMLInputElement;
+}
+interface SignInFormElement extends HTMLFormElement {
+  readonly elements: FormElements;
+}
 
 export default function LoginPage(){
     const [type, setType] = useState("signIn");
@@ -18,8 +30,6 @@ export default function LoginPage(){
         document.getElementById("navbar")!.style.visibility = 'hidden';
     }, []);
 
-
-
     return(
         <div style={{
             display: 'flex', 
@@ -28,6 +38,11 @@ export default function LoginPage(){
             backgroundSize: 'cover',
             height: '100vh'
           }}>
+            <ToastContainer 
+            autoClose={5000}
+            closeOnClick
+            limit={1}
+          />
             <div className={containerClass} id="container" 
               style={{
                 position: 'absolute', 
@@ -71,37 +86,64 @@ export default function LoginPage(){
 
 
 function SignInForm() {
-    const [state, setState] = React.useState({
-        email: "",
-        password: ""
-      });
-      const handleChange = (evt: any) => {
-        const value = evt.target.value;
-        setState({
-          ...state,
-          [evt.target.name]: value
-        });
-      };
+    // const [state, setState] = React.useState({
+    //     email: "",
+    //     password: ""
+    //   });
+    //   const handleChange = (evt: any) => {
+    //     const value = evt.target.value;
+    //     setState({
+    //       ...state,
+    //       [evt.target.name]: value
+    //     });
+    //   };
     
-      const handleOnSubmit = (evt: any)  => {
-        evt.preventDefault();
+    //   const handleOnSubmit = (evt: any)  => {
+    //     evt.preventDefault();
     
-        const { email, password } = state;
-        alert(`You are login with email: ${email} and password: ${password}`);
+    //     const { email, password } = state;
+    //     alert(`You are login with email: ${email} and password: ${password}`);
         
-        for (const key in state) {
-          setState({
-            ...state,
-            [key]: ""
-          });
-        }
+    //     for (const key in state) {
+    //       setState({
+    //         ...state,
+    //         [key]: ""
+    //       });
+    //     }
 
-        window.location.href = '/admin/dashboard';
-      };
+    //     window.location.href = '/admin/dashboard';
+    //   };
+    const handleLogin = (data: UserRequest) => {
+      post('/api/v1/user/login', data)
+      .then((response) => {
+          localStorage.setItem('ep-token', response.token);
+          window.location.href = '/admin/dashboard';
+      })
+      .catch((err) => {
+          if (err.response === undefined) {
+            toast("Cannot connect to the server", {
+              className: "toast-message"
+            });
+          }
+          else {
+            toast(err.response.data, {
+              className: "toast-message"
+            });
+          }
+      })
+    }
 
     return (
         <div className="form-container sign-in-container">
-          <form onSubmit={handleOnSubmit}>
+          <form onSubmit={(event: React.FormEvent<SignInFormElement>) => {
+                event.preventDefault();
+                const formElements = event.currentTarget.elements;
+                const data = {
+                  username: formElements.username.value,
+                  password: formElements.password.value
+                };
+                handleLogin(data);
+          }}>
             <h1>Sign in</h1>
             <div className="social-container">
               <a href="#" className="social">
@@ -116,18 +158,18 @@ function SignInForm() {
             </div>
             <span>or use your account</span>
             <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={state.email}
-              onChange={handleChange}
+              type="username"
+              placeholder="Username"
+              name="username"
+              // value={state.email}
+              // onChange={handleChange}
             />
             <input
               type="password"
               name="password"
               placeholder="Password"
-              value={state.password}
-              onChange={handleChange}
+              // value={state.password}
+              // onChange={handleChange}
             />
             <a href="#">Forgot your password?</a>
             <button className='button'>Sign In</button>

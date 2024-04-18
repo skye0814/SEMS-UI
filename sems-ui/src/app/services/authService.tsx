@@ -15,7 +15,7 @@ const api = axios.create({
 
 export const registerAsync = async (user: User) => {
     try {
-        const response = await axios.post(`${API_URL}/api/user/register`, user);
+        const response = await axios.post(`${API_URL}/api/v1/user/register`, user);
         return response.data;
     }
     catch (error) {
@@ -34,7 +34,7 @@ export const getCurrentUser = async (): Promise<AxiosResponse | null>=> {
 
   if (token) {
       try {
-          const response = await api.get('/api/user/getcurrentuser');
+          const response = await api.get('/api/v1/user/getcurrentuser');
           if (response.status === 200) {
               result = response;
           }

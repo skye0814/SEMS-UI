@@ -205,3 +205,16 @@
     color: #3c97bf;
     text-decoration: none;
   }
+
+  .toast-message {
+    background: #1D2464
+  }
+
+  /* .Toastify__toast-theme--light {
+    background: #1D2464 !important;
+    color: white !important;
+  }
+
+  .Toastify__close-button--light {
+    color: white !important;
+  } */
