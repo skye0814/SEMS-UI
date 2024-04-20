@@ -20,6 +20,7 @@ import EvaluationForm from './EvaluationForm';
 import MatchDetails from './MatchDetails';
 import Rankings from './Rankings';
 import RequireAuth from '../common/RequireAuth';
+import SportsManager from './SportsManager';
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
                   element={
                     <RequireAuth>
                       <Dashboard />
+                    </RequireAuth>
+                  } 
+                />
+                <Route 
+                  path="admin/sports-manager" 
+                  element={
+                    <RequireAuth>
+                      <SportsManager />
                     </RequireAuth>
                   } 
                 />

@@ -53,7 +53,7 @@ export default function NavBar(){
       icon: 'gamepad',
       text: 'Sports',
       location: () => {
-        window.location.href = '/admin/sports'
+        window.location.href = '/admin/sports-manager'
       }
     },
     {
@@ -179,13 +179,7 @@ export default function NavBar(){
             <Link to="admin/events-manager">Events</Link>
           </li>
           <li>
-            <Link to="admin/participants">Participants</Link>
-          </li>
-          <li>
-            <Link to="admin/finance">Finance</Link>
-          </li>
-          <li>
-            <Link to="admin/broadcast">Broadcast</Link>
+            <Link to="admin/sports-manager">Sports</Link>
           </li>
         </div>
       </ul>
