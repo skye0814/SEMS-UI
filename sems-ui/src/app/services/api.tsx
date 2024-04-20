@@ -88,7 +88,18 @@ export const put = async (url: string, data: any) => {
     }
   };
   
-export const del = async (url: string) => {
+export const del = (url: string) => {
+  return api
+    .delete(url)
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+export const deleteAsync = async (url: string) => {
   try {
     const response = await api.delete(url);
     return response.data;
