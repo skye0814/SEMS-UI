@@ -179,7 +179,10 @@ export default function MatchDetails(){
                                     marginTop: '20px'
                                 }}>
                                     <Col xs={5}></Col>
-                                    <Col xs={2}>
+                                    <Col xs={2} style={{
+                                                display: 'flex',
+                                                alignItems: 'center', 
+                                                justifyContent: 'center'}}>
                                         <Button colorScheme='blue'>Evaluate Event</Button>
                                     </Col>
                                     <Col xs={5}></Col>

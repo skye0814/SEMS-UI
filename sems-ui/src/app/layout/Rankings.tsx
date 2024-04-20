@@ -78,7 +78,7 @@ export default function Rankings() {
                 <Container fluid="md" style={{ paddingTop: "20px" }}>
                     <Row style={{ marginTop: "15px" }}>
                         <Col xs={12}>
-                            <Box bg="#3646a6" w="100%" p={5} color="white">
+                            <Box bg="#3646a6" w="100%" p={5} color="white" borderRadius={10}>
                                 <h6>
                                     <span>1. TEAM DARLENG</span>
                                     <span>12 W  -  0 L</span>
@@ -88,7 +88,7 @@ export default function Rankings() {
                     </Row>
                     <Row style={{ marginTop: "15px" }}>
                         <Col xs={12}>
-                            <Box bg="#3646a6" w="100%" p={5} color="white">
+                            <Box bg="#3646a6" w="100%" p={5} color="white" borderRadius={10}>
                                 <h6>
                                     <span>2. BLACKLIST RIVALRY</span>
                                     <span>11 W  -  1 L</span>
@@ -98,7 +98,7 @@ export default function Rankings() {
                     </Row>
                     <Row style={{ marginTop: "15px" }}>
                         <Col xs={12}>
-                            <Box bg="#3646a6" w="100%" p={5} color="white">
+                            <Box bg="#3646a6" w="100%" p={5} color="white" borderRadius={10}>
                                 <h6>
                                     <span>3. AURORA</span>
                                     <span>10 W  -  2 L</span>
@@ -108,7 +108,7 @@ export default function Rankings() {
                     </Row>
                     <Row style={{ marginTop: "15px" }}>
                         <Col xs={12}>
-                            <Box bg="#3646a6" w="100%" p={5} color="white">
+                            <Box bg="#3646a6" w="100%" p={5} color="white" borderRadius={10}>
                                 <h6>
                                     <span>4. AURORA</span>
                                     <span>10 W  -  2 L</span>
@@ -118,7 +118,7 @@ export default function Rankings() {
                     </Row>
                     <Row style={{ marginTop: "15px" }}>
                         <Col xs={12}>
-                            <Box bg="#3646a6" w="100%" p={5} color="white">
+                            <Box bg="#3646a6" w="100%" p={5} color="white" borderRadius={10}>
                                 <h6>
                                     <span>5. TEAM D</span>
                                     <span>10 W  -  2 L</span>
@@ -128,7 +128,7 @@ export default function Rankings() {
                     </Row>
                     <Row style={{ marginTop: "15px" }}>
                         <Col xs={12}>
-                            <Box bg="#3646a6" w="100%" p={5} color="white">
+                            <Box bg="#3646a6" w="100%" p={5} color="white" borderRadius={10}>
                                 <h6>
                                     <span>6. TEAM A</span>
                                     <span>10 W  -  2 L</span>
