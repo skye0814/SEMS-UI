@@ -260,7 +260,7 @@ export default function SportsManager(){
                     <form id='edit-form' onSubmit={handleSubmitEdited}>
                         <FormControl isRequired>
                             <FormLabel>Sport name</FormLabel>
-                            <Input placeholder='Sport name' name='name' value={sportAddData.name} onChange={handleChange} readOnly={false}/>
+                            <Input placeholder='Sport name' name='name' value={sportAddData.name} onChange={handleChange} readOnly={false} isRequired={true}/>
                         </FormControl>
                     </form>
                 </Modal.Body>

@@ -24,6 +24,9 @@ import { deleteAsync, getAsync, post, put } from '../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Sport } from '../models/Sport';
 import { Modal } from 'react-bootstrap';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import { format } from 'date-fns';
 
 export default function EventsManager(){
     // States
@@ -38,6 +41,9 @@ export default function EventsManager(){
         sportId: 0,
         sport: undefined
     }
+    const [selected, setSelected] = React.useState<Date>();
+    const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+    const [showEndDatePicker, setShowEndDatePicker] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditEventModal, setShowEditModal] = useState(false);
     const [showResponseModal, setShowResponseModal] = useState(false);
@@ -53,6 +59,26 @@ export default function EventsManager(){
         sortBy: 'name'
     });
     const [eventAddData, setEventAddData] = useState<Event>(initialEventData);
+    const minDate = new Date();
+    const disabledDays = {
+        before: minDate,
+    };
+    const disabledDaysEndDate = {
+        before: new Date(eventAddData.startDate),
+    }
+
+    const formatDate = (dateString: Date | string) => {
+        if (dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+          });
+        } else {
+          return '';
+        }
+      };
 
     // Functions
     const fetchPagedEvents = () => {
@@ -66,6 +92,8 @@ export default function EventsManager(){
     }
 
     const getSports = () => {
+        setEventAddData(initialEventData);
+
         getAsync(`api/v1/Sport/GetAllSports`)
         .then((response)=> {
             setSports(response);
@@ -160,6 +188,30 @@ export default function EventsManager(){
         setId(id);
         getEventById(id);
         setShowEditModal(true);
+
+        getSports();
+    }
+
+    const handleShowEndDatePicker = () => {
+        setShowEndDatePicker(true);
+    }
+
+    const handleHideEndDatePicker = () => {
+        setShowEndDatePicker(false);
+    }
+
+    const handleShowStartDatePicker = () => {
+        setShowStartDatePicker(true);
+    }
+
+    const selectStartDate = (selected: Date | any) => {
+        setEventAddData({ ...eventAddData, startDate: selected});
+        setShowStartDatePicker(false);
+    }
+
+    const selectEndDate = (selected: Date | any) => {
+        setEventAddData({ ...eventAddData, endDate: selected});
+        setShowEndDatePicker(false);
     }
 
     // useEffects
@@ -206,8 +258,8 @@ export default function EventsManager(){
                                                 </Td>
                                                 <Td>{event.name}</Td>
                                                 <Td>{event.description}</Td>
-                                                <Td>{event.startDate}</Td>
-                                                <Td>{event.endDate}</Td>
+                                                <Td>{formatDate(event.startDate)}</Td>
+                                                <Td>{formatDate(event.endDate)}</Td>
                                                 <Td>{event.location}</Td>
                                                 <Td>{event.sport?.name}</Td>
                                             </Tr>
@@ -241,17 +293,44 @@ export default function EventsManager(){
                                     <FormLabel>Event name</FormLabel>
                                     <Input placeholder='Event name' name='name' value={eventAddData.name} onChange={handleChange} isRequired={true}/>
                                 </FormControl>
-                                <FormControl isRequired>
+                                <FormControl>
                                     <FormLabel>Description</FormLabel>
                                     <Input placeholder='Description' name='description' value={eventAddData.description} onChange={handleChange} isRequired={false}/>
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Event Start Date</FormLabel>
-                                    <Input placeholder='Event Start Date' name='startDate' value={eventAddData.startDate} onChange={handleChange} isRequired={true}/>
+                                    <Input placeholder='Event Start Date' 
+                                            name='startDate' 
+                                            value={formatDate(eventAddData.startDate)} 
+                                            onChange={handleChange} 
+                                            isRequired={true}
+                                            onFocus={handleShowStartDatePicker} 
+                                            readOnly={true}
+                                    />
+                                    {showStartDatePicker && <DayPicker
+                                        mode="single"
+                                        selected={selected}
+                                        onSelect={selectStartDate}
+                                        disabled={disabledDays}
+                                    />}
                                 </FormControl>
-                                <FormControl isRequired>
+                                <FormControl>
                                     <FormLabel>Event End Date</FormLabel>
-                                    <Input placeholder='Event End Date' name='endDate' value={eventAddData.endDate} onChange={handleChange} isRequired={false}/>
+                                    <Input placeholder='Event End Date' 
+                                            name='endDate' 
+                                            value={formatDate(eventAddData.endDate)} 
+                                            onChange={handleChange} 
+                                            isRequired={false} 
+                                            onFocus={handleShowEndDatePicker} 
+                                            disabled={eventAddData.startDate ? false : true}
+                                            readOnly={true}
+                                    />
+                                    {showEndDatePicker && <DayPicker
+                                        mode="single"
+                                        selected={selected}
+                                        onSelect={selectEndDate}
+                                        disabled={disabledDaysEndDate}
+                                    />}
                                 </FormControl>
                                 <FormControl isRequired>
                                     <FormLabel>Location</FormLabel>
@@ -308,8 +387,61 @@ export default function EventsManager(){
                 <Modal.Body>
                     <form id='edit-form' onSubmit={handleSubmitEdited}>
                         <FormControl isRequired>
-                            <FormLabel>Sport name</FormLabel>
-                            <Input placeholder='Sport name' name='name' value={eventAddData.name} onChange={handleChange} readOnly={false}/>
+                            <FormLabel>Event name</FormLabel>
+                            <Input placeholder='Event name' name='name' value={eventAddData.name} onChange={handleChange} isRequired={true}/>
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Description</FormLabel>
+                            <Input placeholder='Description' name='description' value={eventAddData.description} onChange={handleChange} isRequired={false}/>
+                        </FormControl>
+                        <FormControl isRequired>
+                            <FormLabel>Event Start Date</FormLabel>
+                            <Input placeholder='Event Start Date' 
+                                    name='startDate' 
+                                    value={formatDate(eventAddData.startDate)} 
+                                    onChange={handleChange} 
+                                    isRequired={true}
+                                    onFocus={handleShowStartDatePicker} 
+                                    readOnly={true}
+                            />
+                            {showStartDatePicker && <DayPicker
+                                mode="single"
+                                selected={selected}
+                                onSelect={selectStartDate}
+                                disabled={disabledDays}
+                            />}
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Event End Date</FormLabel>
+                            <Input placeholder='Event End Date' 
+                                    name='endDate' 
+                                    value={formatDate(eventAddData.endDate)} 
+                                    onChange={handleChange} 
+                                    isRequired={false} 
+                                    onFocus={handleShowEndDatePicker} 
+                                    disabled={eventAddData.startDate ? false : true}
+                                    readOnly={true}
+                            />
+                            {showEndDatePicker && <DayPicker
+                                mode="single"
+                                selected={selected}
+                                onSelect={selectEndDate}
+                                disabled={disabledDaysEndDate}
+                            />}
+                        </FormControl>
+                        <FormControl isRequired>
+                            <FormLabel>Location</FormLabel>
+                            <Input placeholder='Location' name='location' value={eventAddData.location} onChange={handleChange} isRequired={true} />
+                        </FormControl>
+                        <FormControl isRequired>
+                            <FormLabel>Sport</FormLabel>
+                            <Select placeholder='Select a Sport' name='sportId' value={eventAddData.sportId} onChange={handleChange} isRequired={true}>
+                                {sports?.map((sport) => {
+                                    return(
+                                        <option key={sport.id} value={sport.id}>{sport.name}</option>
+                                    )
+                                })}
+                            </Select>
                         </FormControl>
                     </form>
                 </Modal.Body>

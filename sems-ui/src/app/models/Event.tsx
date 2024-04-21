@@ -4,8 +4,8 @@ export interface Event{
     id: number,
     name: string,
     description: string,
-    startDate: string,
-    endDate: string,
+    startDate: Date | string,
+    endDate: Date | string,
     location: string,
 
     sportId: number,
