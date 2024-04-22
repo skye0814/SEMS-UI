@@ -55,3 +55,43 @@
     align-items: center;
     justify-content: space-between;
   }
+
+  .date-row {
+    margin-top: 20px;
+  }
+
+  .date-col {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .match-row {
+    margin-top: 5px;
+  }
+
+  .vs-col {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .team-box {
+    background-color: #3646a6;
+    width: 100%;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: rgba(255, 255, 255, 1) 0px 4px 12px;
+    color: #F8F9FB;
+  }
+
+  .match-container {
+    padding-top: 20px;
+  }
+
+  .sports-icon {
+    height: 40px;
+    margin: 10px;
+  }
+    
