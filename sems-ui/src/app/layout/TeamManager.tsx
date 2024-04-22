@@ -18,7 +18,7 @@ import {
 import Pagination from 'react-bootstrap/Pagination';
 import { Select } from '@chakra-ui/react'
 import { PagedResponse } from '../models/PagedResponse';
-import { Sport } from '../models/Sport';
+import { Team } from '../models/Team';
 import { PagedRequest } from '../models/PagedRequest';
 import { del, deleteAsync, getAsync, post, put } from '../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,52 +27,54 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
 import { AxiosError, AxiosPromise, AxiosResponse } from 'axios';
 import { get } from 'http';
 
-export default function SportsManager(){
+export default function TeamManager(){
     // States
-    const initialSportData: Sport = {
+    const initialTeamData: Team = {
         id: 0,
-        name: ''
+        teamName: '',
+        eventId: 0,
+        event: null
     }
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showEditSportModal, setShowEditModal] = useState(false);
+    const [showEditTeamModal, setShowEditModal] = useState(false);
     const [showResponseModal, setShowResponseModal] = useState(false);
     const [responseMessage, setResponseMessage] = useState("");
     const [id, setId] = useState(0);
     const [error, setError] = useState(null);
-    const [sports, setSports] = useState<PagedResponse<Sport[]>>();
+    const [Teams, setTeams] = useState<PagedResponse<Team[]>>();
     const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
         pageNumber: 1,
         pageSize: 10,
         search: "",
         sortBy: 'name'
     });
-    const [sportAddData, setSportAddData] = useState<Sport>(initialSportData);
+    const [TeamAddData, setTeamAddData] = useState<Team>(initialTeamData);
 
     // Functions
-    const fetchPagedSports = () => {
-        post(`api/v1/Sport/Sports`, pagedRequest)
+    const fetchPagedTeams = () => {
+        post(`api/v1/Team/Teams`, pagedRequest)
         .then((response)=> {
-            setSports(response);
+            setTeams(response);
         })
         .catch((err)=>{
             setError(err);
         })
     }
 
-    const getSportById = (id: number) => {
-        getAsync(`api/v1/Sport/GetSport/${id}`)
+    const getTeamById = (id: number) => {
+        getAsync(`api/v1/Team/GetTeam/${id}`)
         .then((response)=> {
-            setSportAddData(response);
+            setTeamAddData(response);
         })
         .catch((err)=>{
             setError(err);
         })
     }
 
-    const deleteSport = (id: number) => {
+    const deleteTeam = (id: number) => {
         setShowDeleteModal(false);
 
-        deleteAsync(`api/v1/Sport/DeleteSport/${id}`)
+        deleteAsync(`api/v1/Team/DeleteTeam/${id}`)
         .then((response: AxiosResponse)=> {
             setResponseMessage("The item was successfully deleted.");
             setShowResponseModal(true);
@@ -85,25 +87,22 @@ export default function SportsManager(){
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setSportAddData((prevData: any) => ({
+        setTeamAddData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-    const handleSubmitSport = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitTeam = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        post('/api/v1/Sport/AddSport', sportAddData)
+        post('/api/v1/Team/AddTeam', TeamAddData)
         .then((response) => {
             setResponseMessage("The item was successfully added.");
             setShowResponseModal(true);
 
             // Reset state value upon successful insert
-            setSportAddData({
-                id: 0,
-                name: ''
-            });
+            setTeamAddData(initialTeamData);
         })
         .catch((err: AxiosError) => {
             setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
@@ -114,7 +113,7 @@ export default function SportsManager(){
     const handleSubmitEdited = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        put('/api/v1/Sport/UpdateSport', sportAddData)
+        put('/api/v1/Team/UpdateTeam', TeamAddData)
         .then((response) => {
             setResponseMessage("The item was successfully updated.");
             setShowResponseModal(true);
@@ -126,7 +125,7 @@ export default function SportsManager(){
     };
 
     const handleClear = () => {
-        setSportAddData(initialSportData);
+        setTeamAddData(initialTeamData);
     }
 
     const handleClose = () => {
@@ -145,15 +144,15 @@ export default function SportsManager(){
     }
     const handleShowEditModal = (id: number) => {
         setId(id);
-        getSportById(id);
+        getTeamById(id);
         setShowEditModal(true);
     }
 
     // useEffects
     useEffect(() => {
-        // Fetch sports on render
-        fetchPagedSports();
-        console.log(sports);
+        // Fetch Teams on render
+        fetchPagedTeams();
+        console.log(Teams);
     }, []);
 
     return(
@@ -161,11 +160,11 @@ export default function SportsManager(){
         <div style={{marginTop: '120px'}}></div>
         <div className='container-index'>
             <div className='page-menu'>
-                <Text fontSize='xl' fontWeight='600'>Sports Manager</Text>
+                <Text fontSize='xl' fontWeight='600'>Team Manager</Text>
                 <Tabs>
                 <TabList>
-                    <Tab>View Sports</Tab>
-                    <Tab onClick={handleClear}>Create Sports</Tab>
+                    <Tab>View Teams</Tab>
+                    <Tab onClick={handleClear}>Create Team</Tab>
                 </TabList>
                     <TabPanels>
                         <TabPanel>
@@ -179,14 +178,14 @@ export default function SportsManager(){
                                     </Tr>
                                     </Thead>
                                     <Tbody>
-                                    {sports?.data.map((sport) => {
+                                    {Teams?.data.map((Team) => {
                                         return(
-                                            <Tr key={sport.id}>
+                                            <Tr key={Team.id}>
                                                 <Td>
-                                                    <FontAwesomeIcon className = 'table-button' icon='pen' onClick={() => handleShowEditModal(sport.id)}/>
-                                                    <FontAwesomeIcon className = 'table-button' icon='trash' onClick={() => handleShowDeleteModal(sport.id)}/>
+                                                    <FontAwesomeIcon className = 'table-button' icon='pen' onClick={() => handleShowEditModal(Team.id)}/>
+                                                    <FontAwesomeIcon className = 'table-button' icon='trash' onClick={() => handleShowDeleteModal(Team.id)}/>
                                                 </Td>
-                                                <Td>{sport.name}</Td>
+                                                <Td>{Team.teamName}</Td>
                                             </Tr>
                                         )
                                     })}
@@ -213,10 +212,10 @@ export default function SportsManager(){
                             </Pagination>
                         </TabPanel>
                         <TabPanel>
-                            <form onSubmit={handleSubmitSport} id='add-form'>
+                            <form onSubmit={handleSubmitTeam} id='add-form'>
                                 <FormControl isRequired>
-                                    <FormLabel>Sport name</FormLabel>
-                                    <Input placeholder='Sport name' name='name' value={sportAddData.name} onChange={handleChange}/>
+                                    <FormLabel>Team name</FormLabel>
+                                    <Input placeholder='Team name' name='name' value={TeamAddData.teamName} onChange={handleChange}/>
                                 </FormControl>
                                 <Button colorScheme='blue' type='submit' form='add-form'>Create</Button>
                             </form>
@@ -229,12 +228,12 @@ export default function SportsManager(){
                 <Modal.Header closeButton>
                 <Modal.Title>Delete</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete this sport?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this Team?</Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={() => deleteSport(id)}>
+                <Button variant="primary" onClick={() => deleteTeam(id)}>
                     Delete
                 </Button>
                 </Modal.Footer>
@@ -252,15 +251,15 @@ export default function SportsManager(){
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showEditSportModal} onHide={handleClose} centered>
+            <Modal show={showEditTeamModal} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                 <Modal.Title>Edit</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form id='edit-form' onSubmit={handleSubmitEdited}>
                         <FormControl isRequired>
-                            <FormLabel>Sport name</FormLabel>
-                            <Input placeholder='Sport name' name='name' value={sportAddData.name} onChange={handleChange} readOnly={false} isRequired={true}/>
+                            <FormLabel>Team name</FormLabel>
+                            <Input placeholder='Team name' name='name' value={TeamAddData.teamName} onChange={handleChange} readOnly={false} isRequired={true}/>
                         </FormControl>
                     </form>
                 </Modal.Body>

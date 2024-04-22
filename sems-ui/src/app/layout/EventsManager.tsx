@@ -27,6 +27,7 @@ import { Modal } from 'react-bootstrap';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { format } from 'date-fns';
+import { Axios, AxiosError, AxiosResponse } from 'axios';
 
 export default function EventsManager(){
     // States
@@ -62,6 +63,7 @@ export default function EventsManager(){
     const minDate = new Date();
     const disabledDays = {
         before: minDate,
+        after: eventAddData.endDate
     };
     const disabledDaysEndDate = {
         before: new Date(eventAddData.startDate),
@@ -121,8 +123,8 @@ export default function EventsManager(){
             setResponseMessage("The item was successfully deleted.");
             setShowResponseModal(true);
         })
-        .catch((err)=>{
-            setResponseMessage("There was an error when deleting the item.");
+        .catch((err: AxiosError)=>{
+            setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
             setShowResponseModal(true);
         })
     }
@@ -146,8 +148,8 @@ export default function EventsManager(){
             // Reset state value upon successful insert
             setEventAddData(initialEventData);
         })
-        .catch((err) => {
-            setResponseMessage("There was an error when adding the item.");
+        .catch((err: AxiosError) => {
+            setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
             setShowResponseModal(true);
         })
     };
@@ -160,8 +162,8 @@ export default function EventsManager(){
             setResponseMessage("The item was successfully updated.");
             setShowResponseModal(true);
         })
-        .catch((err) => {
-            setResponseMessage("There was an error when adding the item.");
+        .catch((err: AxiosError) => {
+            setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
             setShowResponseModal(true);
         })
     };

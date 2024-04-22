@@ -181,6 +181,9 @@ export default function NavBar(){
           <li>
             <Link to="admin/sports-manager">Sports</Link>
           </li>
+          <li>
+            <Link to="admin/team-manager">Team</Link>
+          </li>
         </div>
       </ul>
 

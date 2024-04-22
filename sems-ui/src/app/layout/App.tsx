@@ -22,6 +22,7 @@ import Rankings from './Rankings';
 import RequireAuth from '../common/RequireAuth';
 import EventMatchup from './EventMatchup';
 import SportsManager from './SportsManager';
+import TeamManager from './TeamManager';
 
 function App() {
   return (
@@ -58,6 +59,14 @@ function App() {
                   element={
                     <RequireAuth>
                       <SportsManager />
+                    </RequireAuth>
+                  } 
+                />
+                <Route 
+                  path="admin/team-manager" 
+                  element={
+                    <RequireAuth>
+                      <TeamManager />
                     </RequireAuth>
                   } 
                 />
