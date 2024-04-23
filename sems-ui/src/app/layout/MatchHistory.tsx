@@ -15,11 +15,11 @@ export default function MatchHistory(){
         <div style={{marginTop: '120px'}}></div>
         <div className='container-index'>
             <Container fluid>
-                <Row style={{marginTop: '20px'}}>
+                <Row>
                     <Col>
                         <div className='dashboard-card' style={{backgroundColor: '#b3e8ff', height: '550px'}}>
                             <Tabs align='center' variant='enclosed'>
-                                <TabList m={10}>
+                                <TabList m={1}>
                                     <Tab><img className='sports-icon' src="/images/sports icon/basketball.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/football.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/volleyball.png" alt="Sport1"/></Tab>
