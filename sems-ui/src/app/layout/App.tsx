@@ -23,6 +23,7 @@ import RequireAuth from '../common/RequireAuth';
 import EventMatchup from './EventMatchup';
 import SportsManager from './SportsManager';
 import TeamManager from './TeamManager';
+import TeamRegistration from './TeamRegistration';
 
 function App() {
   return (
@@ -76,6 +77,7 @@ function App() {
                 <Route path="matchdetails" element={<MatchDetails />} />
                 <Route path="rankings" element={<Rankings />} />
                 <Route path="eventmatchup" element={<EventMatchup />} />
+                <Route path="teamregistration" element={<TeamRegistration />} />
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />
