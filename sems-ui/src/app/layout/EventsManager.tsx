@@ -220,7 +220,6 @@ export default function EventsManager(){
     useEffect(() => {
         // Fetch Events on render
         fetchPagedEvents();
-        console.log(events);
     }, []);
 
     return(

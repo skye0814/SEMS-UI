@@ -153,7 +153,6 @@ export default function SportsManager(){
     useEffect(() => {
         // Fetch sports on render
         fetchPagedSports();
-        console.log(sports);
     }, []);
 
     return(

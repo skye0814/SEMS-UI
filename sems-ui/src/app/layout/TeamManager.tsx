@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, FormControl, FormLabel, Input } from '@chakra-ui/react'
+import { Avatar, Button, ButtonGroup, FormControl, FormLabel, Input } from '@chakra-ui/react'
 import "../../styles/index.css";
 import "../../styles/sportsmanager.css"
 import { Text } from '@chakra-ui/react'
@@ -26,14 +26,20 @@ import { Modal } from 'react-bootstrap';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 import { AxiosError, AxiosPromise, AxiosResponse } from 'axios';
 import { get } from 'http';
+import { Event } from '../models/Event';
+import { TeamLogo } from '../models/TeamLogo';
 
 export default function TeamManager(){
     // States
     const initialTeamData: Team = {
         id: 0,
         teamName: '',
+
         eventId: 0,
-        event: null
+        event: null,
+        
+        teamLogoId: 0,
+        teamLogo: null
     }
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditTeamModal, setShowEditModal] = useState(false);
@@ -42,6 +48,8 @@ export default function TeamManager(){
     const [id, setId] = useState(0);
     const [error, setError] = useState(null);
     const [Teams, setTeams] = useState<PagedResponse<Team[]>>();
+    const [events, setEvents] = useState<Event[]>();
+    const [logos, setLogos] = useState<TeamLogo[]>();
     const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
         pageNumber: 1,
         pageSize: 10,
@@ -71,6 +79,35 @@ export default function TeamManager(){
         })
     }
 
+    const getEvents = () => {
+        setTeamAddData(initialTeamData);
+
+        getAsync(`api/v1/Event/GetAllEvents`)
+        .then((response)=> {
+            setEvents(response);
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
+    const getLogos = () => {
+        setTeamAddData(initialTeamData);
+
+        getAsync(`api/v1/TeamLogo/GetAllTeamLogo`)
+        .then((response)=> {
+            setLogos(response);
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
+    const loadData = () => {
+        getEvents();
+        getLogos();
+    }
+
     const deleteTeam = (id: number) => {
         setShowDeleteModal(false);
 
@@ -85,7 +122,7 @@ export default function TeamManager(){
         })
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setTeamAddData((prevData: any) => ({
             ...prevData,
@@ -146,13 +183,14 @@ export default function TeamManager(){
         setId(id);
         getTeamById(id);
         setShowEditModal(true);
+
+        loadData();
     }
 
     // useEffects
     useEffect(() => {
         // Fetch Teams on render
         fetchPagedTeams();
-        console.log(Teams);
     }, []);
 
     return(
@@ -164,7 +202,7 @@ export default function TeamManager(){
                 <Tabs>
                 <TabList>
                     <Tab>View Teams</Tab>
-                    <Tab onClick={handleClear}>Create Team</Tab>
+                    <Tab onClick={loadData}>Create Team</Tab>
                 </TabList>
                     <TabPanels>
                         <TabPanel>
@@ -174,7 +212,10 @@ export default function TeamManager(){
                                     <Thead>
                                     <Tr>
                                         <Th>Edit</Th>
+                                        <Th>Logo</Th>
                                         <Th>Name</Th>
+                                        <Th>Event Name</Th>
+                                        <Th>Sport</Th>
                                     </Tr>
                                     </Thead>
                                     <Tbody>
@@ -185,7 +226,12 @@ export default function TeamManager(){
                                                     <FontAwesomeIcon className = 'table-button' icon='pen' onClick={() => handleShowEditModal(Team.id)}/>
                                                     <FontAwesomeIcon className = 'table-button' icon='trash' onClick={() => handleShowDeleteModal(Team.id)}/>
                                                 </Td>
+                                                <Td>
+                                                    {Team.teamLogo?.imageUrl && <Avatar src={Team.teamLogo?.imageUrl} />}
+                                                </Td>
                                                 <Td>{Team.teamName}</Td>
+                                                <Td>{Team.event?.name}</Td>
+                                                <Td>{Team.event?.sport?.name}</Td>
                                             </Tr>
                                         )
                                     })}
@@ -215,7 +261,27 @@ export default function TeamManager(){
                             <form onSubmit={handleSubmitTeam} id='add-form'>
                                 <FormControl isRequired>
                                     <FormLabel>Team name</FormLabel>
-                                    <Input placeholder='Team name' name='name' value={TeamAddData.teamName} onChange={handleChange}/>
+                                    <Input placeholder='Team name' name='teamName' value={TeamAddData.teamName} onChange={handleChange} readOnly={false}/>
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Event</FormLabel>
+                                    <Select placeholder='Select an Event' name='eventId' value={TeamAddData.eventId} onChange={handleChange} isRequired={true}>
+                                        {events?.map((event) => {
+                                            return(
+                                                <option key={event.id} value={event.id}>{event.name}</option>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Team Logo</FormLabel>
+                                    <Select placeholder='Select Team Logo' name='teamLogoId' value={TeamAddData.teamLogoId} onChange={handleChange} isRequired={true}>
+                                        {logos?.map((logo) => {
+                                            return(
+                                                <option key={logo.id} value={logo.id}>{logo.name}</option>
+                                            )
+                                        })}
+                                    </Select>
                                 </FormControl>
                                 <Button colorScheme='blue' type='submit' form='add-form'>Create</Button>
                             </form>
@@ -259,7 +325,27 @@ export default function TeamManager(){
                     <form id='edit-form' onSubmit={handleSubmitEdited}>
                         <FormControl isRequired>
                             <FormLabel>Team name</FormLabel>
-                            <Input placeholder='Team name' name='name' value={TeamAddData.teamName} onChange={handleChange} readOnly={false} isRequired={true}/>
+                            <Input placeholder='Team name' name='teamName' value={TeamAddData.teamName} onChange={handleChange} readOnly={false} isRequired={true}/>
+                        </FormControl>
+                        <FormControl isRequired>
+                            <FormLabel>Event</FormLabel>
+                            <Select placeholder='Select an Event' name='eventId' value={TeamAddData.eventId} onChange={handleChange} isRequired={true}>
+                                {events?.map((event) => {
+                                    return(
+                                        <option key={event.id} value={event.id}>{event.name}</option>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                        <FormControl isRequired>
+                            <FormLabel>Team Logo</FormLabel>
+                            <Select placeholder='Select Team Logo' name='teamLogoId' value={TeamAddData.teamLogoId} onChange={handleChange} isRequired={true}>
+                                {logos?.map((logo) => {
+                                    return(
+                                        <option key={logo.id} value={logo.id}>{logo.name}</option>
+                                    )
+                                })}
+                            </Select>
                         </FormControl>
                     </form>
                 </Modal.Body>
