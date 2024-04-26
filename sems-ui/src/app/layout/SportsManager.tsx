@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, FormControl, FormLabel, Input } from '@chakra-ui/react'
+import { Button, ButtonGroup, FormControl, FormLabel, Grid, GridItem, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import "../../styles/index.css";
 import "../../styles/sportsmanager.css"
 import { Text } from '@chakra-ui/react'
@@ -33,6 +33,7 @@ export default function SportsManager(){
         id: 0,
         name: ''
     }
+    const [showSearchbar, setShowSearchbar] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditSportModal, setShowEditModal] = useState(false);
     const [showResponseModal, setShowResponseModal] = useState(false);
@@ -58,6 +59,10 @@ export default function SportsManager(){
             setError(err);
         })
     }
+
+    useEffect(()=>{
+        fetchPagedSports();
+    },[sports]);
 
     const getSportById = (id: number) => {
         getAsync(`api/v1/Sport/GetSport/${id}`)
@@ -89,6 +94,13 @@ export default function SportsManager(){
             ...prevData,
             [name]: value,
         }));
+
+        setPagedRequest((prevData: any) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+        fetchPagedSports();
     };
 
     const handleSubmitSport = (e: React.FormEvent<HTMLFormElement>) => {
@@ -160,11 +172,23 @@ export default function SportsManager(){
         <div style={{marginTop: '120px'}}></div>
         <div className='container-index'>
             <div className='page-menu'>
-                <Text fontSize='xl' fontWeight='600'>Sports Manager</Text>
+                <Grid templateColumns='repeat(5, 1fr)' gap={4}>
+                    <GridItem colSpan={2} h='10'>
+                        <Text fontSize='xl' fontWeight='600'>Sports Manager</Text>
+                    </GridItem>
+                        <GridItem colStart={4} colEnd={6} h='10'>
+                        {showSearchbar && <InputGroup>
+                            <InputLeftElement style={{height: '50px'}} pointerEvents='none'>
+                                <FontAwesomeIcon icon='magnifying-glass'/>
+                            </InputLeftElement>
+                            <Input name='search' placeholder='Search' onChange={handleChange}/>
+                        </InputGroup>}
+                    </GridItem>
+                </Grid>
                 <Tabs>
                 <TabList>
-                    <Tab>View Sports</Tab>
-                    <Tab onClick={handleClear}>Create Sports</Tab>
+                    <Tab onClick={() => (setShowSearchbar(true))}>View Sports</Tab>
+                    <Tab onClick={handleClear} onFocus={() => setShowSearchbar(false)}>Create Sports</Tab>
                 </TabList>
                     <TabPanels>
                         <TabPanel>
