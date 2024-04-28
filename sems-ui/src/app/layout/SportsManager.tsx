@@ -48,9 +48,12 @@ export default function SportsManager(){
         sortBy: 'name'
     });
     const [sportAddData, setSportAddData] = useState<Sport>(initialSportData);
+    const [fetching, setFetching] = useState(false);
 
     // Functions
     const fetchPagedSports = () => {
+        setFetching(true);
+
         post(`api/v1/Sport/Sports`, pagedRequest)
         .then((response)=> {
             setSports(response);
@@ -58,11 +61,27 @@ export default function SportsManager(){
         .catch((err)=>{
             setError(err);
         })
+        .finally(() => {
+            setFetching(false);
+        });
     }
 
-    useEffect(()=>{
-        fetchPagedSports();
-    },[sports]);
+    useEffect(() => {
+        let timeoutId: any; 
+    
+        const debouncedFetch = () => {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            fetchPagedSports();
+          }, 500);
+        };
+    
+        debouncedFetch();
+    
+        return () => {
+          clearTimeout(timeoutId); 
+        };
+      }, [sports, fetching]);
 
     const getSportById = (id: number) => {
         getAsync(`api/v1/Sport/GetSport/${id}`)
