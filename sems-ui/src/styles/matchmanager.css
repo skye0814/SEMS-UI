@@ -1,0 +1,7 @@
+.match-manager-table-tr {
+    cursor: pointer;
+}
+
+.match-manager-table-tr:hover {
+    color: red;
+}
