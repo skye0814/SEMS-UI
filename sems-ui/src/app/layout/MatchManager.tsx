@@ -1,4 +1,4 @@
-import { Avatar, Grid, GridItem, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react'
+import { Avatar, Button, Grid, GridItem, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import {
     Table,
@@ -18,8 +18,9 @@ import { getAsync, post } from '../services/api';
 import { PagedRequest } from '../models/PagedRequest';
 import { Event } from '../models/Event';
 import '../../styles/matchmanager.css';
-import { Modal } from 'react-bootstrap';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { Team } from '../models/Team';
+import { Match } from '../models/Match';
   
 export default function MatchManager() {
     const initialEventData: Event = {
@@ -37,7 +38,8 @@ export default function MatchManager() {
     const [events, setEvents] = useState<PagedResponse<Event[]>>();
     const [event, setEvent] = useState<Event>(initialEventData);
     const [teams, setTeams] = useState<Team[]>([]);
-    const [error, setError] = useState(null);
+    const [matchSeed, setMatchSeed] = useState<Match[]>([]);
+    const [error, setError] = useState<string>("");
     const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
         pageNumber: 1,
         pageSize: 10,
@@ -92,9 +94,67 @@ export default function MatchManager() {
         fetchPagedEvents();
     };
 
+    const matchGenerator = (teams: Team[], eventId: number) => {
+        const numTeams = teams.length;
+
+        if (numTeams <= 1) {
+            setError('Number of teams must be greater than 1');
+        }
+
+        if (numTeams % 2 !== 0) {
+            setError('Number of teams must be an even number');
+        }
+
+        // Shuffle teams using Fisher-Yates algorithm
+        const shuffledTeams = [...teams]; 
+        for (let i = shuffledTeams.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledTeams[i], shuffledTeams[j]] = [shuffledTeams[j], shuffledTeams[i]];
+        }
+
+        const matches: Match[] = [];
+        let id = 0;
+
+        for (let round = 1; round <= Math.ceil(Math.log2(numTeams)); round++) {
+            const numMatches = Math.pow(2, Math.ceil(Math.log2(numTeams)) - round);
+        
+            for (let match = 1; match <= numMatches; match++) {
+              const team1Index = (match - 1) * 2;
+              const team2Index = team1Index + 1;
+        
+              const team1 = shuffledTeams[team1Index] || undefined; 
+              const team2 = shuffledTeams[team2Index] || undefined;
+
+              let currMatch: Match = {
+                id: 0,
+                eventId: eventId,
+                teamId1: team1.id,
+                teamId2: team2.id,
+                round: round,
+                winnerId: 0,
+                matchStartDate: null,
+                matchStatus: '',
+
+                event: undefined,
+                team1: undefined,
+                team2: undefined,
+                winner: undefined
+              }
+        
+              matches.push(currMatch);
+            }
+        }
+        
+        setMatchSeed(matches.filter((match) => match.round === 1));
+    }
+
     useEffect(() => {
         fetchPagedEvents();
     }, []);
+
+    useEffect(() => {
+        console.log(matchSeed);
+    }, [matchSeed]);
 
     return(
         <>
@@ -164,6 +224,23 @@ export default function MatchManager() {
                                 </Tbody>
                             </Table>
                         </TableContainer>
+                        <Container fluid style={{padding: '0 7%'}}>
+                            <Row>
+                                <Col><Input></Input></Col>
+                                <Col style={{textAlign: 'right', margin: 'auto'}}>1 of 1</Col>
+                                <Col style={{textAlign: 'center', margin: 'auto'}}>VS</Col>
+                                <Col style={{textAlign: 'left', margin: 'auto'}}>1 of 1</Col>
+                                <Col><Input></Input></Col>
+                            </Row>
+                            <Row>
+                                <Col><Input></Input></Col>
+                                <Col style={{textAlign: 'right', margin: 'auto'}}>1 of 1</Col>
+                                <Col style={{textAlign: 'center', margin: 'auto'}}>VS</Col>
+                                <Col style={{textAlign: 'left', margin: 'auto'}}>1 of 1</Col>
+                                <Col><Input></Input></Col>
+                            </Row>
+                        </Container>
+                        <Button colorScheme='blue' style={{display: 'flex', margin: '0 auto'}} onClick={() => matchGenerator(teams, event.id)}>Create a round</Button>
                     </Modal.Body>
                 </Modal>
             </div>
