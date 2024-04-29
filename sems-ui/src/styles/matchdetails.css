@@ -56,6 +56,55 @@
     justify-content: space-between;
   }
 
-  Breadcrumb {
+  .row-1 {
+    color: #F8F9FB;
+    background-color: #3646a6;
+    margin-left: -22.5px;
+    margin-right: -22.5px;
+  }
+
+  .img {
     margin: auto;
+    height: 150px;
+  }
+
+  .img-1 {
+    height: 100px;
+    margin: auto;
+  }
+
+  .col-1 {
+    text-align: right;
+    margin: auto;
+  }
+
+  .box-team-1{
+    background-color: #3646a6;
+    width: 100%;
+    padding: 20px;
+    color: #F8F9FB;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+  
+  .box-team-2 {
+    background-color: #3646a6;
+    width: 100%;
+    padding: 20px;
+    color: #F8F9FB;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+  }
+  
+  .box-divider {
+    position: relative;
+    padding: 35px;
+  }
+
+  .box-stats {
+    background-color: #3646a6;
+    width: 100%;
+    color: #F8F9FB;
+    border-radius: 10px;
+    padding: 20px;
   }
