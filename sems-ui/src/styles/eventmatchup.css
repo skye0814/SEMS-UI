@@ -54,6 +54,7 @@
     margin: auto;
   }
 
+  /*-------------------- STYLES FOR BRACKETING --------------------*/
   .vertical-left {
     border-left: 3px solid black;
     height: 30px;
@@ -99,3 +100,41 @@
     height: 50px;
     border-radius: 15px;
   }
+
+  /*-------------------- STYLES FOR EVENT MATCHUP TEAMS --------------------*/
+  .date-row {
+    margin-top: 20px;
+  }
+  
+  .date-col {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .match-row {
+    margin-top: 5px;
+  }
+  
+  .vs-col {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .team-box {
+    background-color: #3646a6;
+    width: 100%;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: rgba(255, 255, 255, 1) 0px 4px 12px;
+    color: #F8F9FB;
+  }
+  
+  .sports-icon {
+    height: 40px;
+    margin: 10px;
+  }
+    
+  
