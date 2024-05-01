@@ -1,0 +1,31 @@
+.error-content{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.error-image {
+    width: 110px !important;
+    margin: auto;
+}
+
+.error-content span:nth-child(2){
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-wrap: nowrap;
+}
+
+.error-content span:nth-child(3){
+    margin-bottom: 20px;
+    text-wrap: nowrap;
+}

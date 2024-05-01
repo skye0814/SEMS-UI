@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate} from "react-router-dom";
 import PageNotFound from '../common/PageNotFound';
+import '../../styles/errorfetch.css';
 
 // import the library
 import { library } from '@fortawesome/fontawesome-svg-core';

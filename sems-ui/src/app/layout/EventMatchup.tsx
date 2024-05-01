@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
 import "../../styles/eventmatchup.css";
 import { Box, Button, Table, TableCaption, TableContainer, TabList, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import { Match } from '../models/Match';
@@ -7,6 +7,8 @@ import { Team } from '../models/Team';
 import EventMatchupTeams from './EventMatchupTeams';
 import { Tabs, Tab, TabPanel, TabPanels } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
+import { getAsync } from '../services/api';
+import { AxiosError } from 'axios';
 
 export function EventMatchupDetails(){
     const [searchParams]: any = useSearchParams();
@@ -47,7 +49,7 @@ export function EventMatchupDetails(){
 
     const [teams, setTeams] = useState<Team[]>(teamsData);
     const [matchSeed, setMatchSeed] = useState<Match[]>([]);
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<AxiosError>();
 
     // state for showing/hiding 8-4-2 brackets
     const [show8, setShow8] = useState(false);
@@ -108,6 +110,15 @@ export function EventMatchupDetails(){
         setMatchSeed(matches.filter((match) => match.round === 1));
     }
 
+    const getEventById = (id: number) => {
+        getAsync(`api/v1/Event/GetEvent/${id}`)
+        .then((response)=> {
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
     useEffect(() => {
         console.log(matchSeed);
     }, [matchSeed]);
@@ -133,7 +144,7 @@ export function EventMatchupDetails(){
 
     // effect to fetch event data onload
     useEffect(() => {
-        console.log(!isNaN(parseInt(searchParams.get('eventId'))) ? searchParams.get('eventId') : 0)
+        getEventById(!isNaN(parseInt(searchParams.get('eventId'))) ? searchParams.get('eventId') : 0);
     },[]);
 
     return(
@@ -363,6 +374,31 @@ export function EventMatchupDetails(){
                     </Col>
                 </Row>
             </Container>
+            <Modal
+                show={error ? true : false}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header>
+                <Modal.Title>Something went wrong</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container fluid>
+                        <Col>
+                            <Row>
+                                <img className='error-image' src='/images/icons/error.png' alt='Fetch Error'/>
+                            </Row>
+                            <Row style={{justifyContent: 'center'}}>
+                                We are unable to connect to the server. Please try again later.
+                            </Row>
+                        </Col>
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => window.location.reload()}>Try again</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
         </>
     );
@@ -371,7 +407,7 @@ export function EventMatchupDetails(){
 export default function EventMatchup() {
 
     const goToMatchDetails = (eventId: number) => {
-        window.location.href = `eventmatchup/event-matchup-details?eventId=${eventId}`
+        window.location.href = `/eventmatchup/event-matchup-details?eventId=${eventId}`
     };
 
     return(
