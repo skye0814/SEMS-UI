@@ -47,6 +47,12 @@ export default function EventMatchup(){
     const [matchSeed, setMatchSeed] = useState<Match[]>([]);
     const [error, setError] = useState<string>("");
 
+    // state for showing/hiding 8-4-2 brackets
+    const [show8, setShow8] = useState(false);
+    const [show4, setShow4] = useState(false);
+    const [show2, setShow2] = useState(false);
+    const [showBracketErr, setShowBracketErr] = useState(false);
+
 
     const matchGenerator = (teams: Team[], eventId: number) => {
         const numTeams = teams.length;
@@ -66,7 +72,6 @@ export default function EventMatchup(){
         }
 
         const matches: Match[] = [];
-        let id = 0;
 
         for (let round = 1; round <= Math.ceil(Math.log2(numTeams)); round++) {
             const numMatches = Math.pow(2, Math.ceil(Math.log2(numTeams)) - round);
@@ -89,8 +94,8 @@ export default function EventMatchup(){
                 matchStatus: '',
 
                 event: undefined,
-                team1: undefined,
-                team2: undefined,
+                team1: team1,
+                team2: team2,
                 winner: undefined
               }
         
@@ -103,7 +108,25 @@ export default function EventMatchup(){
 
     useEffect(() => {
         console.log(matchSeed);
-    }, [matchSeed])
+    }, [matchSeed]);
+
+    useEffect(() => {
+        if (teams.length == 8) {
+            setShow8(true);
+        }
+        else if (teams.length == 4) {
+            setShow4(true);
+        }
+        else if (teams.length == 2) {
+            setShow2(true);
+        }
+        else {
+            setShow8(false);
+            setShow4(false);
+            setShow2(false);
+            setShowBracketErr(true);
+        }
+    }, []);
 
     return(
         <>
@@ -112,9 +135,11 @@ export default function EventMatchup(){
             <Container fluid>
                 <Row style={{marginTop: '20px'}}>
                     <Col>
-                    <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
+                    {show4 && <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
                                 <Row> {/*ROW 1 */}
-                                    <Col xs={2}><Box className='box'>8th SEED</Box></Col>
+                                    <Col xs={2}>
+                                        <Box className='box'>{matchSeed.find((ele, index) => index == 0)?.team1?.teamName}</Box>
+                                    </Col>
                                     <Col style={{padding: '0'}}><div className="horizontal-top"></div></Col>
                                     <Col xs={1} style={{display: 'flex', alignItems: 'end'}}><div className="vertical-left"></div></Col>
                                     <Col></Col>
@@ -138,7 +163,9 @@ export default function EventMatchup(){
                                 </Row>
 
                                 <Row> {/*ROW 3 */}
-                                    <Col xs={2}><Box className='box'>5th SEED</Box></Col>
+                                    <Col xs={2}>
+                                        <Box className='box'>{matchSeed.find((ele, index) => index == 0)?.team2?.teamName}</Box>
+                                    </Col>
                                     <Col style={{padding: '0'}}><div className="horizontal-bot"></div></Col>
                                     <Col xs={1} style={{display: 'flex', alignItems: 'start'}}><div className="vertical-left"></div></Col>
                                     <Col></Col>
@@ -162,7 +189,9 @@ export default function EventMatchup(){
                                 </Row>
 
                                 <Row> {/*ROW 5 */}
-                                    <Col xs={2}><Box className='box'>7th SEED</Box></Col>
+                                    <Col xs={2}>
+                                        <Box className='box'>{matchSeed.find((ele, index) => index == 1)?.team1?.teamName}</Box>
+                                    </Col>
                                     <Col style={{padding: '0'}}><div className="horizontal-top"></div></Col>
                                     <Col xs={1} style={{display: 'flex', alignItems: 'end'}}><div className="vertical-left"></div></Col>
                                     <Col></Col>
@@ -186,7 +215,9 @@ export default function EventMatchup(){
                                 </Row>
 
                                 <Row> {/*ROW 7 */}
-                                <Col xs={2}><Box className='box'>2nd SEED</Box></Col>
+                                <Col xs={2}>
+                                    <Box className='box'>{matchSeed.find((ele, index) => index == 1)?.team2?.teamName}</Box>
+                                </Col>
                                     <Col style={{padding: '0'}}><div className="horizontal-bot"></div></Col>
                                     <Col xs={1} style={{display: 'flex', alignItems: 'start'}}><div className="vertical-left"></div></Col>
                                     <Col></Col>
@@ -196,9 +227,8 @@ export default function EventMatchup(){
                                     <Col style={{padding: '0'}}></Col>
                                     <Col xs={2}></Col>
                                 </Row>
-                        </div>
-                        <Button colorScheme='blue' style={{display: 'flex', margin: '0 auto'}} onClick={() => matchGenerator(teams, 2)}>Create a round</Button>
-                        <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
+                        </div>}
+                        {show8 && <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
                                 <Row> {/*ROW 1 */}
                                     <Col xs={2}><Box className='box'>8th SEED</Box></Col>
                                     <Col style={{padding: '0'}}><div className="horizontal-top"></div></Col>
@@ -282,7 +312,19 @@ export default function EventMatchup(){
                                     <Col style={{padding: '0'}}><div className="horizontal-bot"></div></Col>
                                     <Col xs={2}><Box className='box'>6th SEED</Box></Col>
                                 </Row>
-                        </div>    
+                        </div>}
+                        
+                        {showBracketErr && 
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                Team count required is 8, 4, or 2 to create a bracketing system.
+                            </div>
+                        }
+                        {!showBracketErr && 
+                            <Button colorScheme='blue' style={{display: 'flex', margin: '0 auto'}} onClick={() => matchGenerator(teams, 2)}>
+                                Create a round
+                            </Button>
+                        }
+                        
                         <div className='dashboard-card' style={{backgroundColor: '#b3e8ff', height: '550px'}}>
                             <Tabs align='center' variant='enclosed'>
                                 <TabList m={1}>
