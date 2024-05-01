@@ -135,7 +135,7 @@ function SignInForm() {
 
     return (
         <div className="form-container sign-in-container">
-          <form onSubmit={(event: React.FormEvent<SignInFormElement>) => {
+          <form className='form-login' onSubmit={(event: React.FormEvent<SignInFormElement>) => {
                 event.preventDefault();
                 const formElements = event.currentTarget.elements;
                 const data = {
@@ -210,7 +210,7 @@ function SignUpForm() {
   
     return (
       <div className="form-container sign-up-container">
-        <form onSubmit={handleOnSubmit}>
+        <form className='form-login' onSubmit={handleOnSubmit}>
           <h1>Create Account</h1>
           <div className="social-container">
             <a href="#" className="social">

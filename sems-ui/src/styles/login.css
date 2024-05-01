@@ -24,7 +24,7 @@
     border-color: #ffffff;
   }
   
-  form {
+  .form-login {
     background-color: #ffffff;
     display: flex;
     align-items: center;
