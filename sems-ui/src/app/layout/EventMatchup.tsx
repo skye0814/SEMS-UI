@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import "../../styles/eventmatchup.css";
-import { Box, Button, TabList} from '@chakra-ui/react'
+import { Box, Button, Table, TableCaption, TableContainer, TabList, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import { Match } from '../models/Match';
 import { Team } from '../models/Team';
 import EventMatchupTeams from './EventMatchupTeams';
-import { Tabs, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
+import { Tabs, Tab, TabPanel, TabPanels } from '@chakra-ui/react';
+import { useSearchParams } from 'react-router-dom';
 
-export default function EventMatchup(){
+export function EventMatchupDetails(){
+    const [searchParams]: any = useSearchParams();
 
     // test teams data
     const teamsData: Team[] = [{
@@ -58,11 +60,11 @@ export default function EventMatchup(){
         const numTeams = teams.length;
 
         if (numTeams <= 1) {
-            setError('Number of teams must be greater than 1');
+            throw new Error('Number of teams must be greater than 1');
         }
 
         if (numTeams % 2 !== 0) {
-            setError('Number of teams must be an even number');
+            throw new Error('Number of teams must be an even number');
         }
 
         const shuffledTeams = [...teams]; 
@@ -110,6 +112,7 @@ export default function EventMatchup(){
         console.log(matchSeed);
     }, [matchSeed]);
 
+    // effect for showing/hiding brackets onload
     useEffect(() => {
         if (teams.length == 8) {
             setShow8(true);
@@ -128,6 +131,11 @@ export default function EventMatchup(){
         }
     }, []);
 
+    // effect to fetch event data onload
+    useEffect(() => {
+        console.log(!isNaN(parseInt(searchParams.get('eventId'))) ? searchParams.get('eventId') : 0)
+    },[]);
+
     return(
         <>
         <div style={{marginTop: '120px'}}></div>
@@ -135,7 +143,9 @@ export default function EventMatchup(){
             <Container fluid>
                 <Row style={{marginTop: '20px'}}>
                     <Col>
-                    {show4 && <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
+                    {show4 && 
+                    <form id='add-match4'>
+                        <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
                                 <Row> {/*ROW 1 */}
                                     <Col xs={2}>
                                         <Box className='box'>{matchSeed.find((ele, index) => index == 0)?.team1?.teamName}</Box>
@@ -227,7 +237,9 @@ export default function EventMatchup(){
                                     <Col style={{padding: '0'}}></Col>
                                     <Col xs={2}></Col>
                                 </Row>
-                        </div>}
+                        </div>
+                    </form>
+                    }
                         {show8 && <div className='dashboard-card' style={{ backgroundColor: '#b3e8ff', height: 'auto', padding: '10px'}}>
                                 <Row> {/*ROW 1 */}
                                     <Col xs={2}><Box className='box'>8th SEED</Box></Col>
@@ -319,8 +331,12 @@ export default function EventMatchup(){
                                 Team count required is 8, 4, or 2 to create a bracketing system.
                             </div>
                         }
-                        {!showBracketErr && 
-                            <Button colorScheme='blue' style={{display: 'flex', margin: '0 auto'}} onClick={() => matchGenerator(teams, 2)}>
+                        {!showBracketErr && show4 &&
+                            <Button colorScheme='blue' 
+                                    style={{display: 'flex', margin: '0 auto'}} 
+                                    onClick={() => matchGenerator(teams, 2)}
+                                    form='add-match4'
+                            >
                                 Create a round
                             </Button>
                         }
@@ -347,6 +363,40 @@ export default function EventMatchup(){
                     </Col>
                 </Row>
             </Container>
+        </div>
+        </>
+    );
+}
+
+export default function EventMatchup() {
+
+    const goToMatchDetails = (eventId: number) => {
+        window.location.href = `eventmatchup/event-matchup-details?eventId=${eventId}`
+    };
+
+    return(
+        <>
+        <div style={{marginTop: '120px'}}></div>
+        <div className='container-index'>
+            <div className='page-menu'>
+                <TableContainer style={{marginTop: 50}}>
+                    <Table variant='simple'>
+                        <TableCaption></TableCaption> 
+                        <Thead>
+                        <Tr>
+                            <Th>Event Name</Th>
+                            <Th>Sport</Th>
+                        </Tr>
+                        </Thead>
+                        <Tbody>
+                            <Tr className='match-manager-table-tr' onClick={() => goToMatchDetails(2)}>
+                                <Td>Alley-oop Extravaganza</Td>
+                                <Td>Basketball</Td>
+                            </Tr>
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </div>
         </div>
         </>
     );
