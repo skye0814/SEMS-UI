@@ -7,47 +7,48 @@ import { Team } from '../models/Team';
 import EventMatchupTeams from './EventMatchupTeams';
 import { Tabs, Tab, TabPanel, TabPanels } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
-import { getAsync } from '../services/api';
+import { get, getAsync } from '../services/api';
 import { AxiosError } from 'axios';
 
 export function EventMatchupDetails(){
     const [searchParams]: any = useSearchParams();
+    const eventId = !isNaN(parseInt(searchParams.get('eventId'))) ? searchParams.get('eventId') : 0;
 
-    // test teams data
-    const teamsData: Team[] = [{
-        id: 1,
-        teamName: 'Team Darleng',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    },
-    {
-        id: 2,
-        teamName: 'Team Buffalo',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    },
-    {
-        id: 3,
-        teamName: 'Team Chameleon',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    },
-    {
-        id: 4,
-        teamName: 'Team Payaman',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    }];
+    // // test teams data
+    // const teamsData: Team[] = [{
+    //     id: 1,
+    //     teamName: 'Team Darleng',
+    //     eventId: 2,
+    //     event: null,
+    //     teamLogoId: 0,
+    //     teamLogo: null
+    // },
+    // {
+    //     id: 2,
+    //     teamName: 'Team Buffalo',
+    //     eventId: 2,
+    //     event: null,
+    //     teamLogoId: 0,
+    //     teamLogo: null
+    // },
+    // {
+    //     id: 3,
+    //     teamName: 'Team Chameleon',
+    //     eventId: 2,
+    //     event: null,
+    //     teamLogoId: 0,
+    //     teamLogo: null
+    // },
+    // {
+    //     id: 4,
+    //     teamName: 'Team Payaman',
+    //     eventId: 2,
+    //     event: null,
+    //     teamLogoId: 0,
+    //     teamLogo: null
+    // }];
 
-    const [teams, setTeams] = useState<Team[]>(teamsData);
+    const [teams, setTeams] = useState<Team[]>([]);
     const [matchSeed, setMatchSeed] = useState<Match[]>([]);
     const [error, setError] = useState<AxiosError>();
 
@@ -121,20 +122,38 @@ export function EventMatchupDetails(){
         })
     }
 
+    const getTeamsByEventId = (id: number) => {
+        getAsync(`api/v1/Team/GetTeamsByEventId/${id}`)
+        .then((response)=> {
+            setTeams(response);
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
+    const getMatchByEventId = () => {
+        // put here and then use it to disable match generator if there is no match found
+    }
+
     useEffect(() => {
         console.log(matchSeed);
     }, [matchSeed]);
 
     // effect for showing/hiding brackets onload
     useEffect(() => {
+        console.log(teams);
         if (teams.length == 8) {
             setShow8(true);
+            setShowBracketErr(false);
         }
         else if (teams.length == 4) {
             setShow4(true);
+            setShowBracketErr(false);
         }
         else if (teams.length == 2) {
             setShow2(true);
+            setShowBracketErr(false);
         }
         else {
             setShow8(false);
@@ -142,11 +161,13 @@ export function EventMatchupDetails(){
             setShow2(false);
             setShowBracketErr(true);
         }
-    }, []);
+        
+    }, [teams]);
 
     // effect to fetch event data onload
     useEffect(() => {
-        getEventById(!isNaN(parseInt(searchParams.get('eventId'))) ? searchParams.get('eventId') : 0);
+        getEventById(eventId);
+        getTeamsByEventId(eventId);
     },[]);
 
     return(
