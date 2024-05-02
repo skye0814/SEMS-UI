@@ -1,8 +1,44 @@
 import { Box } from "@chakra-ui/react";
 import { Container, Row, Col } from "react-bootstrap";
+import { Team } from "../models/Team";
 
 
 export default function MatchHistoryContainer() {
+    // test teams data
+    const teamsData: Team[] = [{
+        id: 1,
+        teamName: 'Team Darleng',
+        eventId: 2,
+        event: null,
+        teamLogoId: 0,
+        teamLogo: null
+    },
+    {
+        id: 2,
+        teamName: 'Team Buffalo',
+        eventId: 2,
+        event: null,
+        teamLogoId: 0,
+        teamLogo: null
+    },
+    {
+        id: 3,
+        teamName: 'Team Chameleon',
+        eventId: 2,
+        event: null,
+        teamLogoId: 0,
+        teamLogo: null
+    },
+    {
+        id: 4,
+        teamName: 'Team Payaman',
+        eventId: 2,
+        event: null,
+        teamLogoId: 0,
+        teamLogo: null
+    }];
+    
+
     return (
         <Container fluid="md" className='match-container'>
             <Row className='date-row'>
@@ -13,7 +49,8 @@ export default function MatchHistoryContainer() {
             <Row className='match-row'>
                 <Col xs={5}>
                     <Box className='team-box'>
-                        <h6><span>TEAM A</span><span>87</span></h6>
+                        <h6>
+                            <span>TEAM A</span><span>87</span></h6>
                     </Box>
                 </Col>
                 <Col xs={2} className='vs-col'>VS</Col>

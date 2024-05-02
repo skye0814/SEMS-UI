@@ -18,7 +18,8 @@ export interface Match {
     winner: Team | null | undefined,
 
     matchStartDate: string | null,
-    matchStatus: string
+    matchStatus: string,
 
-
+    team1Score: number,
+    team2Score: number
 }
