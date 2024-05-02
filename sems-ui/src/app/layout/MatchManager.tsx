@@ -134,6 +134,8 @@ export default function MatchManager() {
                 winnerId: 0,
                 matchStartDate: null,
                 matchStatus: '',
+                team1Score: 0,
+                team2Score: 0,
 
                 event: undefined,
                 team1: undefined,

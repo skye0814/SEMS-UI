@@ -1,43 +1,73 @@
 import { Box } from "@chakra-ui/react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Team } from "../models/Team";
+import { Match } from "../models/Match";
 
 
 export default function MatchHistoryContainer() {
     // test teams data
-    const teamsData: Team[] = [{
+    const matchData: Match[] = [
+    {
         id: 1,
-        teamName: 'Team Darleng',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
+        eventId: 0,
+        event: undefined,
+        teamId1: 0,
+        teamId2: 0,
+        team1: {
+            id: 1,
+            teamName: 'Team Darleng',
+            eventId: 2,
+            event: null,
+            teamLogoId: 0,
+            teamLogo: null
+        },
+        team2: {
+            id: 2,
+            teamName: 'Blacklist Rivalry',
+            eventId: 2,
+            event: null,
+            teamLogoId: 0,
+            teamLogo: null
+        },
+        round: 0,
+        winnerId: 0,
+        winner: undefined,
+        matchStartDate: null,
+        matchStatus: "",
+        team1Score: 87,
+        team2Score: 88
     },
     {
         id: 2,
-        teamName: 'Team Buffalo',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    },
-    {
-        id: 3,
-        teamName: 'Team Chameleon',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    },
-    {
-        id: 4,
-        teamName: 'Team Payaman',
-        eventId: 2,
-        event: null,
-        teamLogoId: 0,
-        teamLogo: null
-    }];
-    
+        eventId: 0,
+        event: undefined,
+        teamId1: 0,
+        teamId2: 0,
+        team1: {
+            id: 3,
+            teamName: 'Aurora',
+            eventId: 2,
+            event: null,
+            teamLogoId: 0,
+            teamLogo: null
+        },
+        team2: {
+            id: 4,
+            teamName: 'Gaimin Gladiators',
+            eventId: 2,
+            event: null,
+            teamLogoId: 0,
+            teamLogo: null
+        },
+        round: 0,
+        winnerId: 0,
+        winner: undefined,
+        matchStartDate: null,
+        matchStatus: "",
+        team1Score: 43,
+        team2Score: 75
+    }
+    ]
 
     return (
         <Container fluid="md" className='match-container'>
@@ -50,13 +80,18 @@ export default function MatchHistoryContainer() {
                 <Col xs={5}>
                     <Box className='team-box'>
                         <h6>
-                            <span>TEAM A</span><span>87</span></h6>
+                            <span>{matchData.find((element, index) => index==0)?.team1?.teamName}</span>
+                            <span>{matchData.find((element, index) => index==0)?.team1Score}</span>
+                        </h6>
                     </Box>
                 </Col>
                 <Col xs={2} className='vs-col'>VS</Col>
                 <Col xs={5}>
                     <Box className='team-box'>
-                        <h6><span>88</span><span>TEAM B</span></h6>
+                        <h6>
+                            <span>{matchData.find((element, index) => index==0)?.team2Score}</span>
+                            <span>{matchData.find((element, index) => index==0)?.team2?.teamName}</span>
+                        </h6>
                     </Box>
                 </Col>
             </Row>
@@ -68,13 +103,19 @@ export default function MatchHistoryContainer() {
             <Row className='match-row'>
                 <Col xs={5}>
                     <Box className='team-box'>
-                        <h6><span>TEAM C</span><span>43</span></h6>
+                        <h6>
+                            <span>{matchData.find((element, index) => index==1)?.team1?.teamName}</span>
+                            <span>{matchData.find((element, index) => index==1)?.team1Score}</span>
+                        </h6>
                     </Box>
                 </Col>
                 <Col xs={2} className='vs-col'>VS</Col>
                 <Col xs={5}>
                     <Box className='team-box'>
-                        <h6><span>75</span><span>TEAM D</span></h6>
+                        <h6>
+                            <span>{matchData.find((element, index) => index==1)?.team2Score}</span>
+                            <span>{matchData.find((element, index) => index==1)?.team2?.teamName}</span>
+                        </h6>
                     </Box>
                 </Col>
             </Row>
