@@ -26,6 +26,7 @@ import SportsManager from './SportsManager';
 import TeamManager from './TeamManager';
 import TeamRegistration from './TeamRegistration';
 import MatchManager from './MatchManager';
+import { TestEventMatchup } from './TestEventMatchup';
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
                 <Route path="eventmatchup" element={<EventMatchup />} />
                 <Route path="eventmatchup/event-matchup-details" element={<EventMatchupDetails />} />
                 <Route path="teamregistration" element={<TeamRegistration />} />
+                <Route path="testeventmatchup" element={<TestEventMatchup />} />
 
                 <Route path='login' element={<LoginPage />} />
                 <Route path="/" element={<Navigate replace to="login" />} />
