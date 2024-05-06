@@ -27,6 +27,8 @@ npm install react-bootstrap bootstrap
 npm i @canvasjs/react-charts
 npm install --save react-toastify
 npm install react-day-picker date-fns 
+npm i react-tournament-bracket
+npm i react-brackets
 ```
 
 ## Authors
