@@ -7,48 +7,15 @@ import { Team } from '../models/Team';
 import EventMatchupTeams from './EventMatchupTeams';
 import { Tabs, Tab, TabPanel, TabPanels } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
-import { get, getAsync } from '../services/api';
+import { get, getAsync, post } from '../services/api';
 import { AxiosError } from 'axios';
 import { Event } from '../models/Event';
 import { Bracket, IRoundProps, Seed, SeedItem, SeedTeam } from 'react-brackets';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function EventMatchupDetails(){
     const [searchParams]: any = useSearchParams();
     const eventId = !isNaN(parseInt(searchParams.get('eventId'))) ? searchParams.get('eventId') : 0;
-
-    // // test teams data
-    // const teamsData: Team[] = [{
-    //     id: 1,
-    //     teamName: 'Team Darleng',
-    //     eventId: 2,
-    //     event: null,
-    //     teamLogoId: 0,
-    //     teamLogo: null
-    // },
-    // {
-    //     id: 2,
-    //     teamName: 'Team Buffalo',
-    //     eventId: 2,
-    //     event: null,
-    //     teamLogoId: 0,
-    //     teamLogo: null
-    // },
-    // {
-    //     id: 3,
-    //     teamName: 'Team Chameleon',
-    //     eventId: 2,
-    //     event: null,
-    //     teamLogoId: 0,
-    //     teamLogo: null
-    // },
-    // {
-    //     id: 4,
-    //     teamName: 'Team Payaman',
-    //     eventId: 2,
-    //     event: null,
-    //     teamLogoId: 0,
-    //     teamLogo: null
-    // }];
 
     const [teams, setTeams] = useState<Team[]>([]);
     const [matchSeed, setMatchSeed] = useState<Match[]>([]);
@@ -60,6 +27,10 @@ export function EventMatchupDetails(){
     const [show4, setShow4] = useState(false);
     const [show2, setShow2] = useState(false);
     const [showBracketErr, setShowBracketErr] = useState(false);
+
+    // other states
+    const [showResponseModal, setShowResponseModal] = useState(false);
+    const [responseMessage, setResponseMessage] = useState("");
 
     const rounds: IRoundProps[] = [
         {
@@ -124,7 +95,6 @@ export function EventMatchupDetails(){
                     style={{
                     backgroundColor: (homeTeam?.score ? homeTeam?.score : 0) > (awayTeam?.score ? awayTeam?.score : 0) && "red",
                     }}
-                    onClick={() => alert(seedIndex)}
                 >
                     <div>{homeTeam?.name ? homeTeam?.name : "----"}</div>
                     <div>{homeTeam?.score ? homeTeam?.score : '-'}</div>
@@ -198,10 +168,29 @@ export function EventMatchupDetails(){
             }
             
             setMatchSeed(matches.filter((match) => match.round === 1));
+            addMatch(matches.filter((match) => match.round === 1));
         }
         else {
             throw new Error(`Cannot generate match anymore because there are already existing matches in the event "${event?.name}"`);
         }
+    }
+
+    const addMatch = (matches: Match[]) => {
+        matches = matches.map((match) => {
+                    return { ...match, team1: null, team2: null}
+                });
+
+        console.log(matches);
+
+        post(`api/v1/match/addmatches`, matches)
+        .then(() => {
+            setResponseMessage("Match successfully created.");
+            setShowResponseModal(true);
+        })
+        .catch((err: AxiosError)=>{
+            setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
+            setShowResponseModal(true);
+        })
     }
 
     const getEventById = (id: number) => {
@@ -233,6 +222,14 @@ export function EventMatchupDetails(){
         .catch((err)=>{
             setError(err);
         })
+    }
+
+    const handleClose = () => {
+        setShowResponseModal(false);
+    }
+    const handleCloseAndReload = () => {
+        window.location.reload();
+        setShowResponseModal(false);
     }
 
     useEffect(() => {
@@ -297,22 +294,73 @@ export function EventMatchupDetails(){
                                 Create a round
                             </Button>
                         }
+                        {!showBracketErr && show4 && matchSeed.length === 0 ? false : true &&
+                            <Button colorScheme='blue' 
+                                    style={{display: 'flex', margin: '0 auto'}} 
+                                    onClick={() => matchGenerator(teams, 2)}
+                                    form='add-match4'
+                            >
+                                Save changes
+                            </Button>
+                        }
                         
                         <div className='dashboard-card' style={{backgroundColor: '#b3e8ff', height: '550px'}}>
                             <Tabs align='center' variant='enclosed'>
                                 <TabList m={1}>
-                                    <Tab><img className='sports-icon' src="/images/sports icon/basketball.png" alt="Sport1"/></Tab>
+                                    <Tab>Round 1</Tab>
+                                    <Tab>Round 2</Tab>
+                                    <Tab>Round 3</Tab>
+                                    {/* <Tab><img className='sports-icon' src="/images/sports icon/basketball.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/football.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/volleyball.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/badminton.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/chess.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/ping-pong.png" alt="Sport1"/></Tab>
                                     <Tab><img className='sports-icon' src="/images/sports icon/tennis.png" alt="Sport1"/></Tab>
-                                    <Tab><img className='sports-icon' src="/images/sports icon/base-ball.png" alt="Sport1"/></Tab>
+                                    <Tab><img className='sports-icon' src="/images/sports icon/base-ball.png" alt="Sport1"/></Tab> */}
                                 </TabList>
                                 <TabPanels>
                                     <TabPanel>   {/*Basketball*/}
-                                        <EventMatchupTeams />
+                                        {/* <EventMatchupTeams/> */}
+                                        <Container fluid="md" className='match-container'>
+                                            {matchSeed.map((match) => {
+                                                if (match.round === 1)
+                                                {
+                                                    return(
+                                                        <>
+                                                        <Row className='date-row'>
+                                                            <Col className='date-col'>
+                                                                {new Date().toDateString()}
+                                                            </Col>
+                                                        </Row>
+                                                        <Row className='match-row'>
+                                                            <Col xs={5} style={{display: 'flex'}}>
+                                                                <FontAwesomeIcon className='match-row-pen' icon='pen'
+                                                                    style={{
+                                                                        fontSize: '25px',
+                                                                        margin: 'auto',
+                                                                        paddingRight: '20px'
+                                                                    }}
+                                                                />
+                                                                <Box className='team-box'>
+                                                                    <h6 style={{position: 'absolute', left: 20}}><span>{match.team1?.teamName}</span></h6>
+                                                                    <h6 style={{position: 'absolute', right: 20}}><span>{match.team1Score}</span></h6>
+                                                                </Box>
+                                                            </Col>
+                                                            <Col xs={2} className='vs-col'>VS</Col>
+                                                            <Col xs={5}>
+                                                                <Box className='team-box'>
+                                                                    <h6 style={{position: 'absolute', left: 20}}><span>{match.team2Score}</span></h6>
+                                                                    <h6 style={{position: 'absolute', right: 20}}><span>{match.team2?.teamName}</span></h6>
+                                                                </Box>
+                                                            </Col>
+                                                        </Row>
+                                                        </>
+                                                    );
+                                                }
+                                                else return null;
+                                            })}
+                                        </Container>
                                     </TabPanel>
                                 </TabPanels>
                             </Tabs>
@@ -343,6 +391,42 @@ export function EventMatchupDetails(){
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={() => window.location.reload()}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={error ? true : false}
+                centered
+            >
+                <Modal.Header>
+                <Modal.Title>Edit Scores</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container fluid>
+                        <Col>
+                            <Row>
+                                <img className='error-image' src='/images/icons/error.png' alt='Fetch Error'/>
+                            </Row>
+                            <Row style={{justifyContent: 'center'}}>
+                                We are unable to connect to the server. Please try again later.
+                            </Row>
+                        </Col>
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => window.location.reload()}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showResponseModal} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                <Modal.Title>Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{responseMessage}</Modal.Body>
+                <Modal.Footer>
+                <Button onClick={() => (handleCloseAndReload())}>
+                    Confirm
+                </Button>
                 </Modal.Footer>
             </Modal>
         </div>

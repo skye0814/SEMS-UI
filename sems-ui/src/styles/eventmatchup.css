@@ -130,6 +130,10 @@
     border-radius: 10px;
     box-shadow: rgba(255, 255, 255, 1) 0px 4px 12px;
     color: #F8F9FB;
+
+    display: flex;
+    position: relative;
+    height: 50px;
   }
   
   .sports-icon {
@@ -137,4 +141,9 @@
     margin: 10px;
   }
     
-  
+  .match-row-pen {
+    font-size: 25px;
+    margin: 'auto';
+    padding-right: 20px;
+    cursor: pointer;
+  }
