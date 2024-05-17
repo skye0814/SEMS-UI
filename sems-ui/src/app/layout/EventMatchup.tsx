@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { Col, Container, Modal, Row } from 'react-bootstrap';
 import "../../styles/eventmatchup.css";
-import { Box, Button, Input, Table, TableCaption, TableContainer, TabList, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import { Box, Button, FormControl, FormLabel, Input, Table, TableCaption, TableContainer, TabList, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import { Match } from '../models/Match';
 import { Team } from '../models/Team';
 import EventMatchupTeams from './EventMatchupTeams';
@@ -31,6 +31,8 @@ export function EventMatchupDetails(){
     // other states
     const [showResponseModal, setShowResponseModal] = useState(false);
     const [responseMessage, setResponseMessage] = useState("");
+    const [showEditScore, setShowEditScore] = useState(false);
+    const [editId, setEditId] = useState("");
 
     const rounds: IRoundProps[] = [
         {
@@ -41,10 +43,10 @@ export function EventMatchupDetails(){
               date: new Date().toDateString(),
               teams: [
                 { 
-                    name: matchSeed.find((ele, index) => index === 0)?.team1?.teamName, score: 0
+                    name: matchSeed.find((ele, index) => index === 0)?.team1?.teamName, score: matchSeed.find((ele, index) => index === 0)?.team1Score
                 }, 
                 { 
-                    name: matchSeed.find((ele, index) => index === 0)?.team2?.teamName, score: 0
+                    name: matchSeed.find((ele, index) => index === 0)?.team2?.teamName, score: matchSeed.find((ele, index) => index === 0)?.team2Score
                 }],
             },
             {
@@ -52,10 +54,10 @@ export function EventMatchupDetails(){
               date: new Date().toDateString(),
               teams: [
                 { 
-                    name: matchSeed.find((ele, index) => index === 1)?.team1?.teamName, score: 0
+                    name: matchSeed.find((ele, index) => index === 1)?.team1?.teamName, score: matchSeed.find((ele, index) => index === 1)?.team1Score
                 }, 
                 { 
-                    name: matchSeed.find((ele, index) => index === 1)?.team2?.teamName, score: 0
+                    name: matchSeed.find((ele, index) => index === 1)?.team2?.teamName, score: matchSeed.find((ele, index) => index === 1)?.team2Score
                 }],
             },
           ],
@@ -224,6 +226,35 @@ export function EventMatchupDetails(){
         })
     }
 
+    const updateScores = (event: SyntheticEvent<HTMLInputElement>, editId: number) => {
+        const { name, value } = event.target as HTMLInputElement;
+
+        let matches: Match[] = [];
+        
+        if (name === "team1Score") {
+            matches = matchSeed.map((match, index) => {
+                if (index === editId) {
+                    return { ...match, team1Score: parseInt(value)}
+                }
+                else {
+                    return { ...match}
+                }
+            });
+        }
+        if (name === "team2Score") {
+            matches = matchSeed.map((match, index) => {
+                if (index === editId) {
+                    return { ...match, team2Score: parseInt(value)}
+                }
+                else {
+                    return { ...match}
+                }
+            });
+        }
+
+        setMatchSeed(matches);
+    }
+
     const handleClose = () => {
         setShowResponseModal(false);
     }
@@ -323,7 +354,7 @@ export function EventMatchupDetails(){
                                     <TabPanel>   {/*Basketball*/}
                                         {/* <EventMatchupTeams/> */}
                                         <Container fluid="md" className='match-container'>
-                                            {matchSeed.map((match) => {
+                                            {matchSeed.map((match, index) => {
                                                 if (match.round === 1)
                                                 {
                                                     return(
@@ -341,6 +372,7 @@ export function EventMatchupDetails(){
                                                                         margin: 'auto',
                                                                         paddingRight: '20px'
                                                                     }}
+                                                                    onClick={() => {setShowEditScore(true); setEditId(index.toString())}}
                                                                 />
                                                                 <Box className='team-box'>
                                                                     <h6 style={{position: 'absolute', left: 20}}><span>{match.team1?.teamName}</span></h6>
@@ -395,26 +427,37 @@ export function EventMatchupDetails(){
             </Modal>
 
             <Modal
-                show={error ? true : false}
+                show={showEditScore}
+                onHide={() => setShowEditScore(false)}
                 centered
             >
-                <Modal.Header>
+                <Modal.Header closeButton>
                 <Modal.Title>Edit Scores</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Container fluid>
-                        <Col>
-                            <Row>
-                                <img className='error-image' src='/images/icons/error.png' alt='Fetch Error'/>
-                            </Row>
-                            <Row style={{justifyContent: 'center'}}>
-                                We are unable to connect to the server. Please try again later.
-                            </Row>
-                        </Col>
-                    </Container>
+                    <FormControl isRequired>
+                        <FormLabel>{matchSeed.find((ele, index) => index === parseInt(editId))?.team1?.teamName} Score</FormLabel>
+                        <Input 
+                            name="team1Score"
+                            type='number' 
+                            value={matchSeed.find((ele, index) => index === parseInt(editId))?.team1Score} 
+                            onChange={(e) => updateScores(e, parseInt(editId))} 
+                            isRequired={true}
+                        />
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>{matchSeed.find((ele, index) => index === parseInt(editId))?.team2?.teamName} Score</FormLabel>
+                        <Input 
+                            name="team2Score"
+                            type='number' 
+                            value={matchSeed.find((ele, index) => index === parseInt(editId))?.team2Score} 
+                            onChange={(e) => updateScores(e, parseInt(editId))} 
+                            isRequired={true}
+                        />
+                    </FormControl>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => window.location.reload()}>Close</Button>
+                    <Button onClick={() => setShowEditScore(false)}>Save</Button>
                 </Modal.Footer>
             </Modal>
 
