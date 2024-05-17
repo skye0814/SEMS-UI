@@ -21,6 +21,7 @@ export function EventMatchupDetails(){
     const [matchSeed, setMatchSeed] = useState<Match[]>([]);
     const [error, setError] = useState<AxiosError | any>();
     const [event, setEvent] = useState<Event>();
+    const [rounds, setRounds] = useState<IRoundProps[]>();
 
     // state for showing/hiding 8-4-2 brackets
     const [show8, setShow8] = useState(false);
@@ -34,7 +35,70 @@ export function EventMatchupDetails(){
     const [showEditScore, setShowEditScore] = useState(false);
     const [editId, setEditId] = useState("");
 
-    const rounds: IRoundProps[] = [
+    const addMatch = (matches: Match[]) => {
+        matches = matches.map((match) => {
+                    return { ...match, team1: null, team2: null}
+                });
+
+        console.log(matches);
+
+        post(`api/v1/match/addmatches`, matches)
+        .then(() => {
+            setResponseMessage("Match successfully created.");
+            setShowResponseModal(true);
+        })
+        .catch((err: AxiosError)=>{
+            setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
+            setShowResponseModal(true);
+        })
+    }
+
+    const getEventById = (id: number) => {
+        getAsync(`api/v1/Event/GetEvent/${id}`)
+        .then((response)=> {
+            setEvent(response);
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
+    const getTeamsByEventId = (id: number) => {
+        getAsync(`api/v1/Team/GetTeamsByEventId/${id}`)
+        .then((response)=> {
+            setTeams(response);
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
+    const getMatchByEventId = (eventId: number) => {
+        // use it to disable match generator if there is no match found
+        get(`api/v1/Match/GetMatchByEventId/${eventId}`)
+        .then((response)=> {
+            setMatchSeed(response);
+        })
+        .catch((err)=>{
+            setError(err);
+        })
+    }
+
+    const populateRoundDisplay = () => {
+        let newRound: IRoundProps[] = [];
+
+        if (teams.length === 2) {
+
+        }
+        else if (teams.length === 4) {
+
+        }
+        else if (teams.length === 8) {
+
+        }
+    }
+
+    const roundss: IRoundProps[] = [
         {
           title: 'Round 1',
           seeds: [
@@ -177,55 +241,6 @@ export function EventMatchupDetails(){
         }
     }
 
-    const addMatch = (matches: Match[]) => {
-        matches = matches.map((match) => {
-                    return { ...match, team1: null, team2: null}
-                });
-
-        console.log(matches);
-
-        post(`api/v1/match/addmatches`, matches)
-        .then(() => {
-            setResponseMessage("Match successfully created.");
-            setShowResponseModal(true);
-        })
-        .catch((err: AxiosError)=>{
-            setResponseMessage(err.response ? err.response?.data as string : "There was an error occured.");
-            setShowResponseModal(true);
-        })
-    }
-
-    const getEventById = (id: number) => {
-        getAsync(`api/v1/Event/GetEvent/${id}`)
-        .then((response)=> {
-            setEvent(response);
-        })
-        .catch((err)=>{
-            setError(err);
-        })
-    }
-
-    const getTeamsByEventId = (id: number) => {
-        getAsync(`api/v1/Team/GetTeamsByEventId/${id}`)
-        .then((response)=> {
-            setTeams(response);
-        })
-        .catch((err)=>{
-            setError(err);
-        })
-    }
-
-    const getMatchByEventId = (eventId: number) => {
-        // use it to disable match generator if there is no match found
-        get(`api/v1/Match/GetMatchByEventId/${eventId}`)
-        .then((response)=> {
-            setMatchSeed(response);
-        })
-        .catch((err)=>{
-            setError(err);
-        })
-    }
-
     const updateScores = (event: SyntheticEvent<HTMLInputElement>, editId: number) => {
         const { name, value } = event.target as HTMLInputElement;
 
@@ -300,7 +315,7 @@ export function EventMatchupDetails(){
         <>
         <div style={{marginTop: '120px'}}></div>
         <Bracket
-            rounds={rounds}
+            rounds={roundss}
             renderSeedComponent={CustomSeed}
             swipeableProps={{
             enableMouseEvents: true,
@@ -390,7 +405,7 @@ export function EventMatchupDetails(){
                                                         </>
                                                     );
                                                 }
-                                                else return null;
+                                                else return <></>;
                                             })}
                                         </Container>
                                     </TabPanel>
